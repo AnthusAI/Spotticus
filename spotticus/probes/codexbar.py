@@ -165,21 +165,62 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
 class CodexBarProbe(LeftoverProbe):
     """Probe that calls the local codexbar CLI."""
 
-    def probe(self) -> ProbeReport:
-        try:
+    def probe(self, targets: list[str] | None = None) -> ProbeReport:
+        import concurrent.futures
+        if not targets:
+            try:
+                process = subprocess.run(
+                    ["codexbar", "usage", "--format", "json"],
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                    check=True,
+                )
+                return parse_codexbar_json(process.stdout)
+            except subprocess.TimeoutExpired:
+                return ProbeReport(status=ProbeStatus.FAILED, error="TimeoutExpired")
+            except subprocess.CalledProcessError as e:
+                return ProbeReport(status=ProbeStatus.FAILED, error=f"Non-zero exit: {e.stderr}")
+            except FileNotFoundError:
+                return ProbeReport(status=ProbeStatus.FAILED, error="codexbar not on PATH")
+            except Exception as e:
+                return ProbeReport(status=ProbeStatus.FAILED, error=str(e))
+
+        providers = list({t.split(".")[0] for t in targets})
+        results = []
+        errors = []
+
+        def _fetch_provider(provider: str) -> str:
             process = subprocess.run(
-                ["codexbar", "usage", "--format", "json"],
+                ["codexbar", "usage", "--provider", provider, "--format", "json"],
                 capture_output=True,
                 text=True,
                 timeout=60,
                 check=True,
             )
-            return parse_codexbar_json(process.stdout)
-        except subprocess.TimeoutExpired:
-            return ProbeReport(status=ProbeStatus.FAILED, error="TimeoutExpired")
-        except subprocess.CalledProcessError as e:
-            return ProbeReport(status=ProbeStatus.FAILED, error=f"Non-zero exit: {e.stderr}")
-        except FileNotFoundError:
-            return ProbeReport(status=ProbeStatus.FAILED, error="codexbar not on PATH")
-        except Exception as e:
-            return ProbeReport(status=ProbeStatus.FAILED, error=str(e))
+            return process.stdout
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_to_provider = {executor.submit(_fetch_provider, p): p for p in providers}
+            for future in concurrent.futures.as_completed(future_to_provider):
+                p = future_to_provider[future]
+                try:
+                    data = future.result()
+                    report = parse_codexbar_json(data)
+                    if report.status == ProbeStatus.FAILED:
+                        errors.append(f"{p}: {report.error}")
+                    else:
+                        results.extend(report.results)
+                except subprocess.TimeoutExpired:
+                    errors.append(f"{p}: TimeoutExpired")
+                except subprocess.CalledProcessError as e:
+                    errors.append(f"{p}: Non-zero exit: {e.stderr}")
+                except FileNotFoundError:
+                    errors.append(f"{p}: codexbar not on PATH")
+                except Exception as e:
+                    errors.append(f"{p}: {str(e)}")
+
+        if errors and not results:
+            return ProbeReport(status=ProbeStatus.FAILED, error="; ".join(errors))
+
+        return ProbeReport(status=ProbeStatus.OK, results=results)

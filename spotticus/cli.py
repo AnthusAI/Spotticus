@@ -13,10 +13,43 @@ from spotticus.scoring import score_provider
 
 from spotticus.locks import claim_lock, release_lock, hold_lock, unhold_lock
 
+
+def _matches_target(provider: str, pool_id: str, targets: list[str]) -> bool:
+    for t in targets:
+        if t == provider or t == f"{provider}.{pool_id}":
+            return True
+    return False
+
+import dataclasses
+import dataclasses
+def _prune_report(report, targets: list[str]):
+    if not targets:
+        return report
+        
+    new_results = []
+    for result in report.results:
+        if result.pools:
+            new_pools = {
+                p_id: windows
+                for p_id, windows in result.pools.items()
+                if _matches_target(result.provider, p_id, targets)
+            }
+            new_result = dataclasses.replace(result, pools=new_pools)
+            new_results.append(new_result)
+        else:
+            new_results.append(result)
+            
+    # Remove providers that have no pools remaining (but keep the failed ones which have no pools natively if we want, or do we? Wait, targets filtering means we only care about targets. But if a probe failed, should we keep it? For now, we only drop results where pools became empty due to filtering.)
+    # Actually, if we filter, we only want the targets. If a result has empty pools, we can drop it.
+    final_results = [r for r in new_results if r.pools or r.status != "ok"] 
+    # Actually, wait, ProbeReport might be frozen too? Let's check `spotticus/models.py`.
+    return dataclasses.replace(report, results=[r for r in new_results if r.pools])
+
 def _cmd_status(args: argparse.Namespace) -> int:
     """Probe all providers and display their spare capacity status."""
     probe = CodexBarProbe()
-    report = probe.probe()
+    report = probe.probe(targets=args.target)
+    report = _prune_report(report, args.target)
 
     if report.status == ProbeStatus.FAILED:
         if args.json:
@@ -174,6 +207,13 @@ def main(argv: list[str] | None = None) -> int:
     status_parser.add_argument(
         "--json", action="store_true", help="Output as JSON."
     )
+    status_parser.add_argument(
+        "--target",
+        action="append",
+        default=[],
+        help="Specific pools to query (e.g. antigravity.gemini). Can be passed multiple times.",
+    )
+
     status_parser.add_argument(
         "--threshold",
         type=float,

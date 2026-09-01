@@ -106,3 +106,26 @@ def test_parse_codexbar_cursor():
     assert len(res.pools["cursor-models"]) == 1
     assert "grok" in res.pools
     assert len(res.pools["grok"]) == 1
+
+def test_codexbar_probe_targets_filtering():
+    probe = CodexBarProbe()
+    
+    # Mock subprocess.run to return the appropriate JSON
+    with mock.patch("subprocess.run") as mock_run:
+        mock_run.return_value.stdout = '[{"provider": "antigravity", "usage": {"dataConfidence": "exact"}}]'
+        mock_run.return_value.returncode = 0
+        
+        report = probe.probe(targets=["antigravity.gemini", "cursor.premium"])
+        
+        # It should have called subprocess twice, once for antigravity, once for cursor
+        assert mock_run.call_count == 2
+        calls = mock_run.mock_calls
+        providers_called = set()
+        for call in calls:
+            args = call[1][0]
+            assert "codexbar" in args
+            assert "--provider" in args
+            idx = args.index("--provider")
+            providers_called.add(args[idx + 1])
+            
+        assert providers_called == {"antigravity", "cursor"}
