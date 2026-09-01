@@ -42,16 +42,21 @@ def score_provider(
 ) -> ProviderScore:
     """
     Score a provider based on its windows.
-    A provider is ONLY eligible if ALL of its windows are spare.
-    Failures or missing windows result in ineligible.
+    A provider is ONLY eligible if ALL of its windows are spare and it is not locked.
+    Failures, missing windows, or active locks result in ineligible.
     """
     from spotticus.models import ProbeStatus
+    from spotticus.locks import read_lock
+
+    lock = read_lock(result.provider)
+    lock_data = lock.to_dict() if lock else None
 
     if result.status == ProbeStatus.FAILED or not result.windows:
         return ProviderScore(
             provider=result.provider,
             window_scores=[],
             is_eligible=False,
+            lock_data=lock_data
         )
 
     window_scores = [
@@ -60,9 +65,14 @@ def score_provider(
     ]
 
     is_eligible = all(w.is_spare for w in window_scores)
+    
+    # If locked, it is ineligible
+    if lock is not None:
+        is_eligible = False
 
     return ProviderScore(
         provider=result.provider,
         window_scores=window_scores,
         is_eligible=is_eligible,
+        lock_data=lock_data
     )

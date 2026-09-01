@@ -11,6 +11,8 @@ from spotticus.probes.codexbar import CodexBarProbe
 from spotticus.scoring import score_provider
 
 
+from spotticus.locks import claim_lock, release_lock, hold_lock
+
 def _cmd_status(args: argparse.Namespace) -> int:
     """Probe all providers and display their spare capacity status."""
     probe = CodexBarProbe()
@@ -46,6 +48,7 @@ def _cmd_status(args: argparse.Namespace) -> int:
                 {
                     "provider": s.provider,
                     "is_eligible": s.is_eligible,
+                    "lock_data": s.lock_data,
                     "windows": [
                         {
                             "window": w.window_name,
@@ -66,7 +69,16 @@ def _cmd_status(args: argparse.Namespace) -> int:
         print(f"Spotticus Status (Threshold: {args.threshold}, Floor: {args.floor}%)")
         print("=========================================================")
         for s in provider_scores:
-            if s.is_eligible:
+            if s.lock_data:
+                state = s.lock_data.get("state")
+                product = s.lock_data.get("product", "Unknown")
+                model = s.lock_data.get("model", "Unknown")
+                name = s.lock_data.get("name", "Unknown")
+                if state == "HELD":
+                    status_label = f"🔴 SKIP: HELD by {product} ({model}) name: {name}"
+                else:
+                    status_label = f"🔴 SKIP: Locked by {product} ({model}) name: {name}"
+            elif s.is_eligible:
                 status_label = "🟢 ELIGIBLE"
             elif not s.window_scores:
                 status_label = "🔴 SKIP: No valid windows / Error"
@@ -86,6 +98,42 @@ def _cmd_status(args: argparse.Namespace) -> int:
                 )
 
     return 0 if has_eligible else 1
+
+
+def _cmd_claim(args: argparse.Namespace) -> int:
+    success = claim_lock(
+        provider=args.provider,
+        product=args.product,
+        model=args.model,
+        name=args.name,
+        pid=args.pid,
+        session_id=args.session_id
+    )
+    if success:
+        print(f"Lock claimed for provider {args.provider}.")
+        return 0
+    else:
+        print(f"Failed to claim lock. Provider {args.provider} is already locked.", file=sys.stderr)
+        return 1
+
+
+def _cmd_release(args: argparse.Namespace) -> int:
+    success = release_lock(
+        provider=args.provider,
+        pid=args.pid
+    )
+    if success:
+        print(f"Lock released for provider {args.provider}.")
+        return 0
+    else:
+        print(f"Failed to release lock. Either not locked, PID mismatch, or it is HELD.", file=sys.stderr)
+        return 1
+
+
+def _cmd_hold(args: argparse.Namespace) -> int:
+    hold_lock(args.provider)
+    print(f"Lock preempted and held for provider {args.provider}.")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -122,10 +170,34 @@ def main(argv: list[str] | None = None) -> int:
         help="Remaining-percent floor (default: 15.0).",
     )
 
+    # -- claim --
+    claim_parser = subparsers.add_parser("claim", help="Claim spare capacity for a provider.")
+    claim_parser.add_argument("--provider", required=True, help="Provider to claim.")
+    claim_parser.add_argument("--product", required=True, help="Product name.")
+    claim_parser.add_argument("--model", required=True, help="Model name.")
+    claim_parser.add_argument("--name", required=True, help="Bot or session name.")
+    claim_parser.add_argument("--pid", type=int, required=True, help="Process ID of the agent.")
+    claim_parser.add_argument("--session-id", help="Optional session ID.")
+
+    # -- release --
+    release_parser = subparsers.add_parser("release", help="Release a claimed provider.")
+    release_parser.add_argument("--provider", required=True, help="Provider to release.")
+    release_parser.add_argument("--pid", type=int, required=True, help="Process ID of the agent releasing.")
+
+    # -- hold --
+    hold_parser = subparsers.add_parser("hold", help="Preempt and hold a provider lock.")
+    hold_parser.add_argument("--provider", required=True, help="Provider to hold.")
+
     args = parser.parse_args(argv)
 
     if args.command == "status":
         return _cmd_status(args)
+    elif args.command == "claim":
+        return _cmd_claim(args)
+    elif args.command == "release":
+        return _cmd_release(args)
+    elif args.command == "hold":
+        return _cmd_hold(args)
     else:
         parser.print_help()
         print(

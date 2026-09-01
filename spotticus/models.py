@@ -63,3 +63,4 @@ class ProviderScore:
     provider: str
     window_scores: list[SpareScore]
     is_eligible: bool
+    lock_data: dict | None = None
