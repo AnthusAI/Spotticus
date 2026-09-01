@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "9f927e5b-9a56-4b96-8ac5-288cd3c12e92",
+  "issue_id": "spotticus-051fd1c9-11b3-41b7-ad25-1de356fbef16",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T14:03:14.965Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "As a dispatcher I want both Antigravity tanks (Gemini vs Claude/GPT) with 5h and weekly windows so emptying one tank is not treated as emptying the product.\n\nFeature: Antigravity leftover\n  Scenario: one tank empty is not both empty\n    Given Antigravity leftover with Gemini remaining and Claude-GPT exhausted\n    When Spotticus scores Antigravity pools\n    Then Gemini remains an eligible tank\n    And Claude-GPT is not eligible",
+    "issue_type": "story",
+    "labels": [
+      "antigravity"
+    ],
+    "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+    "priority": 2,
+    "status": "open",
+    "title": "Antigravity leftover treats Gemini and Claude-GPT as separate tanks"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "f5e34de1-308b-4c83-8b80-2dbf87ead032",
+  "issue_id": "spotticus-93d58584-37dd-4dc8-9eb2-5807e9c8abb9",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T14:03:14.979Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "As a dispatcher I need Cursor leftover only if a curated wrapper exists. cursor-agent about has plan tier, not used percent. Official personal leftover API does not exist.\n\nDo not invent api2.cursor.sh scraping. If we ship Cursor, pin a named tool (aiquota or CodexBar) and fail closed. Grok Bot weekly is a separate clock.\n\nFeature: Cursor leftover\n  Scenario: no official leftover\n    Given only cursor-agent about JSON\n    When Spotticus asks for Cursor leftover\n    Then Cursor is not a dispatch target",
+    "issue_type": "story",
+    "labels": [
+      "cursor"
+    ],
+    "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+    "priority": 2,
+    "status": "open",
+    "title": "Cursor leftover has no official CLI; pin an unofficial wrapper or skip"
+  }
+}

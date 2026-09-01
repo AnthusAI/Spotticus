@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotticus"
+version = "0.0.0"
+description = "Spot tasks: leftover included coding-agent quota as interruptible chores"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Anthus" }]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["spotticus*"]
+
+[project.scripts]
+spotticus = "spotticus.cli:main"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = ["spotticus/__init__.py:__version__"]
+branch = "main"
+changelog_file = "CHANGELOG.md"
+allow_zero_version = true
+major_on_zero = false
+commit_parser = "conventional"
+tag_format = "v{version}"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-5f632dae-cc91-4d4c-949b-d494c1e21b87",
+  "title": "Open Kanbus chores labeled spot are the only backlog",
+  "description": "As a dispatcher I pull work only from Kanbus: type chore, label spot, status open. I never write a sidecar queue file.\n\nFeature: Kanbus queue\n  Scenario: sidecar queue is not the source of truth\n    Given a Kanbus project with one open spot chore\n    When Spotticus lists eligible work\n    Then that chore is the only candidate\n    And no queue.json is consulted",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-d6b643b9-7bd9-475c-a3c1-6e37f713a98c",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:29.672601Z",
+  "updated_at": "2026-09-01T14:03:29.672601Z",
+  "closed_at": null,
+  "custom": {}
+}

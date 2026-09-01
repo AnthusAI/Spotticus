@@ -1,0 +1,20 @@
+{
+  "id": "spotticus-a0ecd26b-a399-49a8-9f63-acae01988b37",
+  "title": "Claude leftover is readable as session and weekly windows",
+  "description": "As a dispatcher I want Claude session and weekly leftover with reset times so I can decide whether Claude spare capacity exists.\n\nWrap a curated CLI (cclimits or CodexBar), do not scrape claude.ai cookies.\n\nFeature: Claude leftover\n  Scenario: weekly window is present\n    Given a working Claude leftover probe\n    When Spotticus asks for Claude leftover\n    Then it reports used percent and resets_at for the weekly window\n    And it fails closed if the probe is unreadable",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [
+    "claude"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:14.938832Z",
+  "updated_at": "2026-09-01T14:03:14.938832Z",
+  "closed_at": null,
+  "custom": {}
+}

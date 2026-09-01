@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "title": "Spotticus",
+  "description": "Leftover included coding-agent quota is spare capacity. Interactive work is on-demand. Interruptible Kanbus chores (spot tasks) fill leftover before reset and preempt when a human needs the pool.\n\nTwo jobs: (1) curated leftover probes for products Anthus uses, (2) dispatch policy including per-product clocks and the assumption that one agentic run may burn a whole remaining window.\n\nNot Fast. Not on-demand spend. Not always-be-agenting. Not a second queue beside Kanbus.",
+  "type": "initiative",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:02:43.130907Z",
+  "updated_at": "2026-09-01T14:02:43.130907Z",
+  "closed_at": null,
+  "custom": {}
+}

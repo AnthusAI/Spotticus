@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-6fe5ef8c-5671-4da0-8c63-02ec0fde330b",
+  "title": "Providers Anthus does not run land only via working PRs plus verification",
+  "description": "As a maintainer I accept leftover probes for products we do not subscribe to only when the author supplies a working PR, redacted fixtures, and help re-verifying when vendor URLs move.\n\nSee docs/contributing-providers.md.\n\nFeature: community providers\n  Scenario: missing fixture is rejected\n    Given a pull request for a product Anthus does not run\n    And it has no redacted leftover JSON fixture\n    When maintainers review\n    Then the provider is not merged",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:14.993947Z",
+  "updated_at": "2026-09-01T14:03:14.993947Z",
+  "closed_at": null,
+  "custom": {}
+}

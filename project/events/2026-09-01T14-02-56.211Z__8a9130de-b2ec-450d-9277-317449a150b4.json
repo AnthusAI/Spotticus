@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "8a9130de-b2ec-450d-9277-317449a150b4",
+  "issue_id": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T14:02:56.211Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Maintain a curated catalog of ways to read current included-quota leftover for products Anthus uses. Wrap existing tools (cclimits, CodexBar, later others). Do not invent scrapers.\n\nPin command, JSON shape, windows, reset, last-verified date, fail-closed behavior.\n\nProducts we do not run land only via a working PR plus help verifying. See docs/leftover.md and docs/contributing-providers.md.\n\nDoD: each Anthus product we care about has a named probe module, a fixture, and a last-verified date. Unreadable leftover never dispatches.",
+    "issue_type": "epic",
+    "labels": [],
+    "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+    "priority": 2,
+    "status": "open",
+    "title": "Curated leftover probes"
+  }
+}

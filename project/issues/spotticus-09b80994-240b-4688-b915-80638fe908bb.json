@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "title": "Dispatch leftover as spot tasks",
+  "description": "When leftover is behind linear pace on a resetting window, dispatch interruptible Kanbus spot chores onto that pool. Per-product clocks. Preempt for on-demand.\n\nSafest usage-management default: assume one agentic invocation may consume the rest of the window. One live spot run per pool. Re-probe after each chore. Optional wall-clock/turn caps are hints, not guarantees.\n\nSee docs/dispatch.md.\n\nDoD: spare-pace scoring is specified and tested; hold/preempt reopens the Kanbus chore; no dispatch when leftover is unreadable or a hold is set.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:02:56.226697Z",
+  "updated_at": "2026-09-01T14:02:56.226697Z",
+  "closed_at": null,
+  "custom": {}
+}

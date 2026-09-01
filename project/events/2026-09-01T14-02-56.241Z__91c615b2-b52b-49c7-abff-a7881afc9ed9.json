@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "91c615b2-b52b-49c7-abff-a7881afc9ed9",
+  "issue_id": "spotticus-d6b643b9-7bd9-475c-a3c1-6e37f713a98c",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T14:02:56.241Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "The backlog is Kanbus. Open chores labeled spot are eligible. Enqueue is kbs create --type chore --label spot. Dispatch sets in_progress. Preempt returns the issue to open with a comment. Done is kbs close.\n\nSpotticus must not keep a parallel queue.json or other issue store. All reads and writes go through kbs.\n\nDoD: enqueue/list/dispatch/preempt/close are specified against a temp Kanbus project. No second backlog exists in the product.",
+    "issue_type": "epic",
+    "labels": [],
+    "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+    "priority": 2,
+    "status": "open",
+    "title": "Kanbus is the spot queue"
+  }
+}

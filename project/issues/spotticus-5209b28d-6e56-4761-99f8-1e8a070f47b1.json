@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-5209b28d-6e56-4761-99f8-1e8a070f47b1",
+  "title": "On-demand hold preempts spot work and reopens the Kanbus chore",
+  "description": "As a human I take the pool back. Spotticus SIGTERMs the spot runner, sets a hold, and returns the Kanbus chore to open.\n\nFeature: preempt\n  Scenario: hold stops dispatch\n    Given a hold is set\n    When Spotticus dispatches\n    Then it does not start a spot run\n\n  Scenario: preempt requeues\n    Given a live spot run for chore C\n    When Spotticus preempts\n    Then the runner is signaled to stop\n    And chore C is open on Kanbus again",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:29.660878Z",
+  "updated_at": "2026-09-01T14:03:29.660878Z",
+  "closed_at": null,
+  "custom": {}
+}

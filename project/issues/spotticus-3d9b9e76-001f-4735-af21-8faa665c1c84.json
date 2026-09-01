@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "title": "Curated leftover probes",
+  "description": "Maintain a curated catalog of ways to read current included-quota leftover for products Anthus uses. Wrap existing tools (cclimits, CodexBar, later others). Do not invent scrapers.\n\nPin command, JSON shape, windows, reset, last-verified date, fail-closed behavior.\n\nProducts we do not run land only via a working PR plus help verifying. See docs/leftover.md and docs/contributing-providers.md.\n\nDoD: each Anthus product we care about has a named probe module, a fixture, and a last-verified date. Unreadable leftover never dispatches.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "673a82f7-81ce-4d06-9a39-9c54d80edb26",
+      "author": "home",
+      "text": "Research dump for leftover probes: docs/research/leftover-tool-landscape.md. Includes aiquota (github.com/kohii/aiquota), aiquota.app, aiuse (github.com/djbclark/aiuse), plus community hubs (CodexBar, ccusage spend-only, tokscale, claude-swap, Claude-Code-Usage-Monitor, Win-CodexBar) and smaller CLIs. Unsorted; later agents should pick a wrap hub. Not a wrap decision.",
+      "created_at": "2026-09-01T14:12:15.608189Z"
+    }
+  ],
+  "created_at": "2026-09-01T14:02:56.211016Z",
+  "updated_at": "2026-09-01T14:12:15.608189Z",
+  "closed_at": null,
+  "custom": {}
+}

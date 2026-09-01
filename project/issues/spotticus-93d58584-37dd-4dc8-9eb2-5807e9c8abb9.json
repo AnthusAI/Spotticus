@@ -1,0 +1,20 @@
+{
+  "id": "spotticus-93d58584-37dd-4dc8-9eb2-5807e9c8abb9",
+  "title": "Cursor leftover has no official CLI; pin an unofficial wrapper or skip",
+  "description": "As a dispatcher I need Cursor leftover only if a curated wrapper exists. cursor-agent about has plan tier, not used percent. Official personal leftover API does not exist.\n\nDo not invent api2.cursor.sh scraping. If we ship Cursor, pin a named tool (aiquota or CodexBar) and fail closed. Grok Bot weekly is a separate clock.\n\nFeature: Cursor leftover\n  Scenario: no official leftover\n    Given only cursor-agent about JSON\n    When Spotticus asks for Cursor leftover\n    Then Cursor is not a dispatch target",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [
+    "cursor"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:14.979140Z",
+  "updated_at": "2026-09-01T14:03:14.979140Z",
+  "closed_at": null,
+  "custom": {}
+}

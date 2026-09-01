@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-4f649514-b695-47eb-becd-307330b384fb",
+  "title": "One live spot run per pool; assume a run may burn remaining quota",
+  "description": "As a dispatcher I assume any agentic invocation may empty the rest of the window. I therefore run at most one live spot job per pool, re-probe after each chore, and treat wall-clock or turn caps as hints not guarantees.\n\nFeature: burn remaining\n  Scenario: second job does not start while first is live\n    Given a spare Claude weekly pool\n    And a spot run is already live on that pool\n    When Spotticus dispatches\n    Then it does not start another run on that pool\n\n  Scenario: re-probe after a chore\n    Given a spare pool that a finished chore then exhausts\n    When Spotticus considers the next chore\n    Then it does not dispatch on the stale snapshot",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:29.649093Z",
+  "updated_at": "2026-09-01T14:03:29.649093Z",
+  "closed_at": null,
+  "custom": {}
+}

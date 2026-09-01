@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "4428e5b1-3196-4214-84a9-6004e1539919",
+  "issue_id": "spotticus-6fe5ef8c-5671-4da0-8c63-02ec0fde330b",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T14:03:14.994Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "As a maintainer I accept leftover probes for products we do not subscribe to only when the author supplies a working PR, redacted fixtures, and help re-verifying when vendor URLs move.\n\nSee docs/contributing-providers.md.\n\nFeature: community providers\n  Scenario: missing fixture is rejected\n    Given a pull request for a product Anthus does not run\n    And it has no redacted leftover JSON fixture\n    When maintainers review\n    Then the provider is not merged",
+    "issue_type": "story",
+    "labels": [],
+    "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+    "priority": 2,
+    "status": "open",
+    "title": "Providers Anthus does not run land only via working PRs plus verification"
+  }
+}

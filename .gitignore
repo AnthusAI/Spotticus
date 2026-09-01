@@ -1,0 +1,16 @@
+project/.overlay/
+project/.cache/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+dist/
+build/
+.DS_Store
+.env
+.env.*
+!.env.example
+AGENTS.local.md

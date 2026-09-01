@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-1f6d61e5-ad5a-4c19-8c28-42a7c03d543f",
+  "title": "Spare capacity is leftover behind linear pace of a refresh cycle",
+  "description": "As a dispatcher I start spot work only when used fraction lags elapsed fraction of the window (example: 25% used at 50% of the cycle). I do not dispatch just because leftover exists.\n\nFeature: spare pace\n  Scenario: behind pace is spare\n    Given a weekly window 50% elapsed and 25% used\n    And remaining percent is above the floor\n    And no hold is set\n    When Spotticus scores that pool\n    Then the pool is eligible for dispatch\n\n  Scenario: on pace is not spare\n    Given a weekly window 50% elapsed and 50% used\n    When Spotticus scores that pool\n    Then the pool is not eligible for dispatch",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T14:03:29.634491Z",
+  "updated_at": "2026-09-01T14:03:29.634491Z",
+  "closed_at": null,
+  "custom": {}
+}
