@@ -1,0 +1,42 @@
+[
+  {
+    "provider": "claude",
+    "source": "claude",
+    "pace": {
+      "primary": {
+        "willLastToReset": true,
+        "summary": "38% in reserve | Expected 38% used | Lasts until reset",
+        "expectedUsedPercent": 38,
+        "stage": "farBehind",
+        "deltaPercent": -38
+      },
+      "secondary": {
+        "willLastToReset": true,
+        "summary": "4% in reserve | Expected 42% used | Lasts until reset",
+        "expectedUsedPercent": 42,
+        "stage": "slightlyBehind",
+        "deltaPercent": -4
+      }
+    },
+    "usage": {
+      "updatedAt": "2026-09-01T14:33:53Z",
+      "primary": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": "2026-09-01T17:40:00Z",
+        "resetDescription": "Resets 1:40pm (America/New_York)"
+      },
+      "secondary": {
+        "usedPercent": 38,
+        "windowMinutes": 10080,
+        "resetsAt": "2026-09-05T16:00:00Z",
+        "resetDescription": "Resets Sep 5 at 12pm (America/New_York)"
+      },
+      "identity": {
+        "providerID": "claude"
+      },
+      "dataConfidence": "percentOnly",
+      "tertiary": null
+    }
+  }
+]
