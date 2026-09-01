@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from spotticus.models import ProbeResult, ProviderScore, SpareScore, WindowUsage
+from spotticus.models import ProbeResult, ProviderScore, PoolScore, SpareScore, WindowUsage
 
 
 def score_window(
@@ -41,38 +41,48 @@ def score_provider(
     remaining_floor: float = 15.0,
 ) -> ProviderScore:
     """
-    Score a provider based on its windows.
-    A provider is ONLY eligible if ALL of its windows are spare and it is not locked.
-    Failures, missing windows, or active locks result in ineligible.
+    Score a provider based on its windows and pools.
     """
     from spotticus.models import ProbeStatus
     from spotticus.locks import read_lock
 
-    lock = read_lock(result.provider)
-    lock_data = lock.to_dict() if lock else None
-
-    if result.status == ProbeStatus.FAILED or not result.windows:
+    if result.status == ProbeStatus.FAILED or not result.pools:
         return ProviderScore(
             provider=result.provider,
-            window_scores=[],
-            is_eligible=False,
+            pool_scores={},
+            is_eligible=False
+        )
+
+    pool_scores = {}
+    provider_eligible = False
+
+    for pool_id, windows in result.pools.items():
+        lock = read_lock(f"{result.provider}.{pool_id}")
+        lock_data = lock.to_dict() if lock else None
+
+        window_scores = [
+            score_window(w, now, spare_threshold, remaining_floor)
+            for w in windows
+        ]
+
+        is_eligible = bool(window_scores) and all(w.is_spare for w in window_scores)
+        
+        # If locked, it is ineligible
+        if lock is not None:
+            is_eligible = False
+
+        if is_eligible:
+            provider_eligible = True
+
+        pool_scores[pool_id] = PoolScore(
+            pool_id=pool_id,
+            window_scores=window_scores,
+            is_eligible=is_eligible,
             lock_data=lock_data
         )
 
-    window_scores = [
-        score_window(w, now, spare_threshold, remaining_floor)
-        for w in result.windows
-    ]
-
-    is_eligible = all(w.is_spare for w in window_scores)
-    
-    # If locked, it is ineligible
-    if lock is not None:
-        is_eligible = False
-
     return ProviderScore(
         provider=result.provider,
-        window_scores=window_scores,
-        is_eligible=is_eligible,
-        lock_data=lock_data
+        pool_scores=pool_scores,
+        is_eligible=provider_eligible
     )

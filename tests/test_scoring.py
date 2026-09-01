@@ -70,7 +70,7 @@ def test_provider_eligible_when_all_windows_spare():
         provider="claude",
         status=ProbeStatus.OK,
         data_confidence=DataConfidence.EXACT,
-        windows=[w1, w2],
+        pools={"default": [w1, w2]},
     )
     score = score_provider(result, now)
     assert score.is_eligible
@@ -84,7 +84,7 @@ def test_provider_ineligible_when_one_window_not_spare():
         provider="claude",
         status=ProbeStatus.OK,
         data_confidence=DataConfidence.EXACT,
-        windows=[w1, w2],
+        pools={"default": [w1, w2]},
     )
     score = score_provider(result, now)
     assert not score.is_eligible
@@ -96,7 +96,7 @@ def test_provider_ineligible_when_no_windows():
         provider="claude",
         status=ProbeStatus.OK,
         data_confidence=DataConfidence.EXACT,
-        windows=[],
+        pools={},
     )
     score = score_provider(result, now)
     assert not score.is_eligible
@@ -109,7 +109,22 @@ def test_provider_ineligible_on_probe_failure():
         provider="claude",
         status=ProbeStatus.FAILED,
         data_confidence=DataConfidence.UNKNOWN,
-        windows=[w1],
+        pools={"default": [w1]},
     )
     score = score_provider(result, now)
     assert not score.is_eligible
+
+def test_provider_mixed_pool_eligibility():
+    now = FIXED_NOW
+    w1 = get_window(10.0, 5040, name="w1") # spare 0.4 (yes)
+    w2 = get_window(50.0, 5040, name="w2") # spare 0.0 (no)
+    result = ProbeResult(
+        provider="antigravity",
+        status=ProbeStatus.OK,
+        data_confidence=DataConfidence.EXACT,
+        pools={"gemini": [w1], "claude": [w2]},
+    )
+    score = score_provider(result, now)
+    assert score.is_eligible is True # Provider is eligible if ANY pool is eligible
+    assert score.pool_scores["gemini"].is_eligible is True
+    assert score.pool_scores["claude"].is_eligible is False

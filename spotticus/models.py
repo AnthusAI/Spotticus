@@ -34,7 +34,7 @@ class ProbeResult:
     provider: str
     status: ProbeStatus
     data_confidence: DataConfidence
-    windows: list[WindowUsage] = field(default_factory=list)
+    pools: dict[str, list[WindowUsage]] = field(default_factory=dict)
     source: str | None = None
     error: str | None = None
     updated_at: datetime | None = None
@@ -59,8 +59,16 @@ class SpareScore:
 
 
 @dataclass(frozen=True)
-class ProviderScore:
-    provider: str
+class PoolScore:
+    pool_id: str
     window_scores: list[SpareScore]
     is_eligible: bool
     lock_data: dict | None = None
+
+
+@dataclass(frozen=True)
+class ProviderScore:
+    provider: str
+    pool_scores: dict[str, PoolScore]
+    is_eligible: bool
+

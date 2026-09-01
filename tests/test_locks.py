@@ -37,7 +37,7 @@ def test_claim_lock_success(mock_locks_dir, mock_is_alive):
 
     with open(path) as f:
         data = json.load(f)
-    assert data["provider"] == "providerA"
+    assert data["target"] == "providerA"
     assert data["state"] == LockState.CLAIMED.value
     assert data["pid"] == 1234
 

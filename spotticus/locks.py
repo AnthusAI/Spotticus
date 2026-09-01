@@ -21,7 +21,7 @@ class LockState(Enum):
 
 @dataclass
 class LockData:
-    provider: str
+    target: str
     product: str
     model: str
     name: str
@@ -49,8 +49,8 @@ def get_locks_dir() -> Path:
     return path
 
 
-def get_lock_path(provider: str) -> Path:
-    return get_locks_dir() / f"{provider}.json"
+def get_lock_path(target: str) -> Path:
+    return get_locks_dir() / f"{target}.json"
 
 
 def _is_process_alive(pid: int) -> bool:
@@ -86,12 +86,12 @@ def _load_lock_data(f) -> Optional[LockData]:
 
 
 @contextmanager
-def acquire_provider_lock(provider: str):
+def acquire_provider_lock(target: str):
     """
     Acquire a file lock on the provider's lockfile, yielding the file object.
     Creates the file if it doesn't exist.
     """
-    path = get_lock_path(provider)
+    path = get_lock_path(target)
     
     # We use open with "a+" to avoid truncating if it exists,
     # and then seek(0) to read it.
@@ -106,25 +106,25 @@ def acquire_provider_lock(provider: str):
                 fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
 
-def read_lock(provider: str) -> Optional[LockData]:
+def read_lock(target: str) -> Optional[LockData]:
     """Read the current valid lock for a provider. Stale locks are ignored (treated as None)."""
-    with acquire_provider_lock(provider) as f:
+    with acquire_provider_lock(target) as f:
         return _load_lock_data(f)
 
 
-def claim_lock(provider: str, product: str, model: str, name: str, pid: int, session_id: Optional[str] = None) -> bool:
+def claim_lock(target: str, product: str, model: str, name: str, pid: int, session_id: Optional[str] = None) -> bool:
     """
     Attempt to claim the lock. Returns True if successful, False if already locked.
     Automatically cleans up or overwrites stale locks.
     """
-    with acquire_provider_lock(provider) as f:
+    with acquire_provider_lock(target) as f:
         current_lock = _load_lock_data(f)
         if current_lock is not None:
             return False  # Already held or actively claimed
         
         # Create new lock
         new_lock = LockData(
-            provider=provider,
+            target=target,
             product=product,
             model=model,
             name=name,
@@ -139,12 +139,12 @@ def claim_lock(provider: str, product: str, model: str, name: str, pid: int, ses
         return True
 
 
-def release_lock(provider: str, pid: int) -> tuple[bool, str]:
+def release_lock(target: str, pid: int) -> tuple[bool, str]:
     """
     Release a claim lock if the pid matches. HELD locks are ignored.
     Returns (True, "") if successfully released, or (False, "reason") if failed.
     """
-    with acquire_provider_lock(provider) as f:
+    with acquire_provider_lock(target) as f:
         current_lock = _load_lock_data(f)
         if current_lock is None:
             return True, ""  # Already unlocked
@@ -161,32 +161,32 @@ def release_lock(provider: str, pid: int) -> tuple[bool, str]:
         
         # We can actually just remove the file to clean up
         try:
-            get_lock_path(provider).unlink(missing_ok=True)
+            get_lock_path(target).unlink(missing_ok=True)
         except OSError:
             pass
         return True, ""
 
 
-def unhold_lock(provider: str) -> None:
+def unhold_lock(target: str) -> None:
     """
     Unconditionally removes the lockfile if it exists, regardless of its state.
     """
-    with acquire_provider_lock(provider) as f:
+    with acquire_provider_lock(target) as f:
         # Clear the lockfile
         f.seek(0)
         f.truncate(0)
         try:
-            get_lock_path(provider).unlink(missing_ok=True)
+            get_lock_path(target).unlink(missing_ok=True)
         except OSError:
             pass
 
 
-def hold_lock(provider: str) -> None:
+def hold_lock(target: str) -> None:
     """
     Preempts the current lock (if CLAIMED) by sending SIGTERM to its pid,
     and sets the lock state to HELD.
     """
-    with acquire_provider_lock(provider) as f:
+    with acquire_provider_lock(target) as f:
         current_lock = _load_lock_data(f)
         
         if current_lock is not None and current_lock.state == LockState.CLAIMED:
@@ -198,7 +198,7 @@ def hold_lock(provider: str) -> None:
                 
         # Write HELD lock
         held_lock = LockData(
-            provider=provider,
+            target=target,
             product=current_lock.product if current_lock else "n/a",
             model=current_lock.model if current_lock else "n/a",
             name=current_lock.name if current_lock else "n/a",
