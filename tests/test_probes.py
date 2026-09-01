@@ -21,15 +21,15 @@ def test_parse_codexbar_json_success():
     assert res.provider == "claude"
     assert res.status == ProbeStatus.OK
     assert res.data_confidence == DataConfidence.PERCENT_ONLY
-    assert len(res.windows) == 2
+    assert len(res.pools["default"]) == 2
     
-    primary = next(w for w in res.windows if w.name == "primary")
+    primary = next(w for w in res.pools["default"] if w.name == "primary")
     assert primary.window_minutes == 300
     assert primary.is_session
     assert not primary.is_weekly
     assert primary.used_percent == 0.0
     
-    secondary = next(w for w in res.windows if w.name == "secondary")
+    secondary = next(w for w in res.pools["default"] if w.name == "secondary")
     assert secondary.window_minutes == 10080
     assert not secondary.is_session
     assert secondary.is_weekly
@@ -78,3 +78,31 @@ def test_codexbar_probe_missing_from_path():
         report = probe.probe()
     assert report.status == ProbeStatus.FAILED
     assert "not on PATH" in report.error
+
+def test_parse_codexbar_antigravity():
+    path = Path(__file__).parent / "fixtures" / "codexbar_antigravity.json"
+    with open(path) as f:
+        json_str = f.read()
+    
+    report = parse_codexbar_json(json_str)
+    assert report.status == ProbeStatus.OK
+    res = report.results[0]
+    assert "gemini" in res.pools
+    assert len(res.pools["gemini"]) == 2
+    assert "claude" in res.pools
+    assert len(res.pools["claude"]) == 2
+
+def test_parse_codexbar_cursor():
+    path = Path(__file__).parent / "fixtures" / "codexbar_cursor.json"
+    with open(path) as f:
+        json_str = f.read()
+    
+    report = parse_codexbar_json(json_str)
+    assert report.status == ProbeStatus.OK
+    res = report.results[0]
+    assert "premium" in res.pools
+    assert len(res.pools["premium"]) == 2
+    assert "cursor-models" in res.pools
+    assert len(res.pools["cursor-models"]) == 1
+    assert "grok" in res.pools
+    assert len(res.pools["grok"]) == 1

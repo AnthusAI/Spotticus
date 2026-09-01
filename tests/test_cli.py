@@ -32,7 +32,7 @@ def make_report(is_eligible=True):
         provider="claude",
         status=ProbeStatus.OK,
         data_confidence=DataConfidence.EXACT,
-        windows=[w],
+        pools={"default": [w]},
     )
     
     return ProbeReport(status=ProbeStatus.OK, results=[result])

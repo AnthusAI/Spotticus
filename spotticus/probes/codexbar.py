@@ -6,6 +6,30 @@ from spotticus.models import DataConfidence, ProbeReport, ProbeResult, ProbeStat
 from spotticus.probes import LeftoverProbe
 
 
+def _parse_window(key: str, win_data: dict) -> WindowUsage | None:
+    try:
+        used_percent = float(win_data["usedPercent"])
+        window_minutes = int(win_data["windowMinutes"])
+        resets_at_str = win_data["resetsAt"].replace("Z", "+00:00")
+        resets_at = datetime.fromisoformat(resets_at_str)
+        reset_description = win_data.get("resetDescription", "")
+        
+        is_session = (window_minutes == 300)
+        is_weekly = (window_minutes == 10080)
+        
+        return WindowUsage(
+            name=key,
+            is_session=is_session,
+            is_weekly=is_weekly,
+            used_percent=used_percent,
+            window_minutes=window_minutes,
+            resets_at=resets_at,
+            reset_description=reset_description,
+        )
+    except (KeyError, ValueError, TypeError):
+        return None
+
+
 def parse_codexbar_json(json_str: str) -> ProbeReport:
     """Parse CodexBar JSON output into a ProbeReport with multiple ProbeResults."""
     try:
@@ -20,7 +44,6 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
     for item in data:
         provider = item.get("provider", "unknown")
         
-        # If there's no usage dict, this provider's data is incomplete
         usage_data = item.get("usage")
         if not isinstance(usage_data, dict):
             results.append(
@@ -43,58 +66,72 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
         updated_at = None
         if updated_at_str:
             try:
-                # Handle Z timezone suffix
                 updated_at_str = updated_at_str.replace("Z", "+00:00")
                 updated_at = datetime.fromisoformat(updated_at_str)
             except ValueError:
                 pass
 
-        windows = []
-        # Check standard window keys: primary, secondary, tertiary
-        for key in ["primary", "secondary", "tertiary"]:
-            win_data = usage_data.get(key)
-            if not isinstance(win_data, dict):
-                continue
+        pools: dict[str, list[WindowUsage]] = {}
+        error = None
+
+        if provider == "antigravity":
+            extra_windows = usage_data.get("extraRateWindows", [])
+            for win_data in extra_windows:
+                if not isinstance(win_data, dict):
+                    continue
+                win_id = win_data.get("id", "unknown")
+                parsed_win = _parse_window(win_id, win_data)
+                if not parsed_win:
+                    error = f"Malformed window in extraRateWindows: '{win_id}'"
+                    break
                 
-            try:
-                used_percent = float(win_data["usedPercent"])
-                window_minutes = int(win_data["windowMinutes"])
-                resets_at_str = win_data["resetsAt"].replace("Z", "+00:00")
-                resets_at = datetime.fromisoformat(resets_at_str)
-                reset_description = win_data.get("resetDescription", "")
-                
-                # Determine window type based on minutes (heuristics from manager)
-                is_session = (window_minutes == 300)
-                is_weekly = (window_minutes == 10080)
-                
-                windows.append(
-                    WindowUsage(
-                        name=key,
-                        is_session=is_session,
-                        is_weekly=is_weekly,
-                        used_percent=used_percent,
-                        window_minutes=window_minutes,
-                        resets_at=resets_at,
-                        reset_description=reset_description,
-                    )
-                )
-            except (KeyError, ValueError, TypeError) as e:
-                # If a window is malformed, we could fail the provider. Let's just fail it.
-                windows = []
-                results.append(
-                    ProbeResult(
-                        provider=provider,
-                        status=ProbeStatus.FAILED,
-                        data_confidence=data_confidence,
-                        error=f"Malformed window '{key}': {e}",
-                    )
-                )
-                break
+                if "gemini" in win_id:
+                    pools.setdefault("gemini", []).append(parsed_win)
+                elif "3p" in win_id:
+                    pools.setdefault("claude", []).append(parsed_win)
+                else:
+                    pools.setdefault("default", []).append(parsed_win)
         
-        # If we broke out of the loop and added a failed result, windows will be empty.
-        # But if windows is empty because there are just no windows, we shouldn't skip the else block
-        # Actually, let's just use a flag or check if the last result was this provider.
-        if results and results[-1].provider == provider and results[-1].status == ProbeStatus.FAILED:
+        elif provider == "cursor":
+            for key in ["primary", "secondary", "tertiary", "cursor-grok-bot"]:
+                win_data = usage_data.get(key)
+                if not isinstance(win_data, dict):
+                    continue
+                parsed_win = _parse_window(key, win_data)
+                if not parsed_win:
+                    error = f"Malformed window '{key}'"
+                    break
+                
+                if key in ("primary", "secondary"):
+                    pools.setdefault("premium", []).append(parsed_win)
+                elif key == "tertiary":
+                    pools.setdefault("cursor-models", []).append(parsed_win)
+                elif key == "cursor-grok-bot":
+                    pools.setdefault("grok", []).append(parsed_win)
+                else:
+                    pools.setdefault("default", []).append(parsed_win)
+        
+        else:
+            # Default for claude, codex, etc.
+            for key in ["primary", "secondary", "tertiary"]:
+                win_data = usage_data.get(key)
+                if not isinstance(win_data, dict):
+                    continue
+                parsed_win = _parse_window(key, win_data)
+                if not parsed_win:
+                    error = f"Malformed window '{key}'"
+                    break
+                pools.setdefault("default", []).append(parsed_win)
+
+        if error:
+            results.append(
+                ProbeResult(
+                    provider=provider,
+                    status=ProbeStatus.FAILED,
+                    data_confidence=data_confidence,
+                    error=error,
+                )
+            )
             continue
             
         results.append(
@@ -102,7 +139,7 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
                 provider=provider,
                 status=ProbeStatus.OK,
                 data_confidence=data_confidence,
-                windows=windows,
+                pools=pools,
                 source=item.get("source"),
                 updated_at=updated_at,
             )
