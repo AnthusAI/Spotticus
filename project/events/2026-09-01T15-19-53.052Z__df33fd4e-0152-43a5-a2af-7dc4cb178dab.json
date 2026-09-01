@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "df33fd4e-0152-43a5-a2af-7dc4cb178dab",
+  "issue_id": "spotticus-1f5bf558-a070-44a8-8fa2-908c66ece8e7",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T15:19:53.052Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+    "priority": 2,
+    "status": "open",
+    "title": "CLI probe and spare subcommands"
+  }
+}

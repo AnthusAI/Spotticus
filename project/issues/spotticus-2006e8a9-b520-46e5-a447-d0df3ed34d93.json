@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-2006e8a9-b520-46e5-a447-d0df3ed34d93",
+  "title": "P3 task",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 3,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "37973516-4645-4b60-9512-d7088f825d86",
+      "author": "home",
+      "text": "Deleted test task",
+      "created_at": "2026-09-01T18:22:39.453391Z"
+    }
+  ],
+  "created_at": "2026-09-01T18:22:14.971392Z",
+  "updated_at": "2026-09-01T18:22:39.453391Z",
+  "closed_at": "2026-09-01T18:22:39.442695Z",
+  "custom": {}
+}

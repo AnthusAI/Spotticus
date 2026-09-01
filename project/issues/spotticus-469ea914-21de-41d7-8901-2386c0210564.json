@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-469ea914-21de-41d7-8901-2386c0210564",
+  "title": "Add --target flag to status CLI and pass to probes",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "658db40e-7dd5-4edf-a3b6-cdf47e20ee30",
+      "author": "home",
+      "text": "Merged in Iteration 4",
+      "created_at": "2026-09-01T17:26:15.196956Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:19:21.546893Z",
+  "updated_at": "2026-09-01T17:26:15.196956Z",
+  "closed_at": "2026-09-01T17:26:15.184928Z",
+  "custom": {}
+}

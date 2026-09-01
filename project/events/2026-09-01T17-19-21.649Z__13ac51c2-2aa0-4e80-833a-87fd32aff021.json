@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "13ac51c2-2aa0-4e80-833a-87fd32aff021",
+  "issue_id": "spotticus-29daa700-c2ba-4f69-ac72-b6827c7ca70f",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T17:19:21.649Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "Prune unrequested pools from output formatters"
+  }
+}

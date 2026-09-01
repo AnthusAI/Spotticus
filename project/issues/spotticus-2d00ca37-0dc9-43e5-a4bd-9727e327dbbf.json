@@ -1,0 +1,27 @@
+{
+  "id": "spotticus-2d00ca37-0dc9-43e5-a4bd-9727e327dbbf",
+  "title": "Dummy spot task A: List files in directory",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [
+    "spot"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "e8eabbee-56fc-4361-bc8d-da0875bc55b3",
+      "author": "home",
+      "text": "Completed by Antigravity Spot Worker",
+      "created_at": "2026-09-01T17:41:32.185803Z"
+    }
+  ],
+  "created_at": "2026-09-01T16:51:27.022321Z",
+  "updated_at": "2026-09-01T17:41:35.273286Z",
+  "closed_at": "2026-09-01T17:41:35.273286Z",
+  "custom": {}
+}

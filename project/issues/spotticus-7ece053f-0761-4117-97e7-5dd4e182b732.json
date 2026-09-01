@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-7ece053f-0761-4117-97e7-5dd4e182b732",
+  "title": "P1 task",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "f6dc5913-be7a-43f2-850d-19ebbb780b49",
+      "author": "home",
+      "text": "Deleted test task",
+      "created_at": "2026-09-01T18:22:39.433140Z"
+    }
+  ],
+  "created_at": "2026-09-01T18:22:14.960349Z",
+  "updated_at": "2026-09-01T18:22:39.433140Z",
+  "closed_at": "2026-09-01T18:22:39.422777Z",
+  "custom": {}
+}

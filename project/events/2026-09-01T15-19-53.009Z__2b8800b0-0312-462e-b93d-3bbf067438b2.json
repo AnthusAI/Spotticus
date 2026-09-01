@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "2b8800b0-0312-462e-b93d-3bbf067438b2",
+  "issue_id": "spotticus-03391194-1377-412f-b603-81679e1c9d63",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T15:19:53.009Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "Spare-pace scoring function"
+  }
+}

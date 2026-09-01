@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "dff48643-b8bd-425b-ad01-8ffdaa3bb57e",
+  "issue_id": "spotticus-112f1c75-a7e9-48e8-b8de-0d69e10334bd",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T16:51:27.064Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [
+      "spot"
+    ],
+    "parent": null,
+    "priority": 2,
+    "status": "open",
+    "title": "Dummy spot task B: Calculate pi to 100 places locally"
+  }
+}

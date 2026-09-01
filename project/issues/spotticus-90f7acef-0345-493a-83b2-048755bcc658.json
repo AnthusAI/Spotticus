@@ -10,9 +10,70 @@
   "parent": null,
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "023799c8-c80a-4a4b-b41e-228884c74a0d",
+      "author": "home",
+      "text": "Iteration 1 scope: one working Claude leftover probe via CodexBar + spare-pace scoring. No dispatch, no multi-product, no daemon.\n\nArchitecture decisions settled:\n1. Window model: dict[str, WindowUsage] keyed by canonical name (not primary/secondary). Antigravity has 4+ windows that don't fit a flat model.\n2. CodexBar coupling: call codexbar usage --format json (all providers), parse per-provider in a pure function. One subprocess call, one parse seam.\n3. Sync for iteration 1. CLI is the only caller. Async is iteration 2.\n4. Scoring: takes WindowUsage (carries resets_at for elapsed calc). Thresholds as function args with defaults. Per-product config is iteration 2.\n5. CLI: probe + spare as separate subcommands. Different concerns, different exit codes.\n6. Tests: manual Gherkin-to-pytest mapping. No pytest-bdd dependency. Keep deps minimal.\n\nStashed prototype is available as reference (git stash: iter1-prototype-code-before-planning).",
+      "created_at": "2026-09-01T15:19:42.746193Z"
+    },
+    {
+      "id": "e736d40b-78a5-4530-acb2-f45e28714cd4",
+      "author": "home",
+      "text": "Pivot Iteration 1 Architecture (based on user feedback):\n1. Window model: Single ordered list of windows (list[WindowUsage]) with metadata (name, is_session, is_weekly).\n2. Scope: Parse all providers returned by CodexBar, not just one.\n3. CLI: High-level UI that looks across all accounts to find dispatch opportunities (e.g., `spotticus opportunities` or `spotticus status`).\n4. Scoring nuance: A provider is ONLY eligible if ALL of its windows are spare.\n5. Implementation: Write fresh code, use stashed prototype only for JSON fixtures.",
+      "created_at": "2026-09-01T15:33:21.105074Z"
+    },
+    {
+      "id": "5e804ca1-2109-4362-92c8-8d15ea3adf37",
+      "author": "home",
+      "text": "Iteration 1 completed. Code merged to develop. CLI `status` command is fully functional for dispatch evaluations across all accounts.",
+      "created_at": "2026-09-01T15:40:01.818742Z"
+    },
+    {
+      "id": "9332ef84-ebe8-49ec-ac2e-951d9d230444",
+      "author": "home",
+      "text": "Iteration 2 scope: Lock Management and Preemption.\nSpotticus acts as a Dispatch Oracle and Lock Manager.\n1. : requires agent metadata (--pid, --product, --model, --name). --session-id is optional. Writes lockfile.\n2. : clears lockfile on clean exit.\n3. : sends SIGTERM to the locked PID, sets a persistent HOLD lock that blocks future claims.\n4. : updated to evaluate lock state (locked or held pools are ineligible).",
+      "created_at": "2026-09-01T16:22:46.079188Z"
+    },
+    {
+      "id": "69797b9c-e698-4cb0-8d47-fa054be7cb2f",
+      "author": "home",
+      "text": "Iteration 2 scope: Lock Management and Preemption.\nSpotticus acts as a Dispatch Oracle and Lock Manager.\n1. `claim`: requires agent metadata (--pid, --product, --model, --name, optional --session-id). Writes lockfile.\n2. `release`: clears lockfile on clean exit.\n3. `hold`: sends SIGTERM to the locked PID, sets a persistent HOLD lock.\n4. `status`: updated to evaluate lock state (locked/held pools are ineligible).",
+      "created_at": "2026-09-01T16:22:52.099479Z"
+    },
+    {
+      "id": "9ff8ef47-4e63-4365-8595-4da98e57d0a4",
+      "author": "home",
+      "text": "Iteration 2 complete. Lock Management and Preemption shipped. Agents can now safely claim, release, and hold pools using Spotticus as a Dispatch Oracle.",
+      "created_at": "2026-09-01T16:32:05.586232Z"
+    },
+    {
+      "id": "41cfb2ea-bdda-4855-9f9a-d7d38d467647",
+      "author": "home",
+      "text": "Iteration 3 scope: Multi-Tank Pools.\n1. Parse `extraRateWindows` in CodexBar output.\n2. Group windows into logical `Pool` objects (e.g., antigravity:gemini, cursor:premium).\n3. Locks and claims apply to `provider:pool` instead of just `provider`.\n4. Scoring evaluates eligibility per-pool, meaning a depleted Claude tank no longer blocks the Gemini tank.",
+      "created_at": "2026-09-01T17:02:20.016336Z"
+    },
+    {
+      "id": "eeafc21c-cc8f-494b-b0f5-cbfeb1c0d261",
+      "author": "home",
+      "text": "Iteration 3 complete. Multi-Tank Pools shipped. Agents can now claim specific model tanks independently.",
+      "created_at": "2026-09-01T17:08:25.215892Z"
+    },
+    {
+      "id": "beb83e1a-f987-43b8-a09d-fe91e20aba4a",
+      "author": "home",
+      "text": "Iteration 4 scope: Target Filtering & Optimization.\n1. Add `--target` flag to `spotticus status` (can be specified multiple times).\n2. Probe layer extracts unique base providers and fetches ONLY those via `codexbar usage --provider X`.\n3. Output layer prunes pools that were not explicitly requested, saving context window tokens.",
+      "created_at": "2026-09-01T17:19:21.045461Z"
+    },
+    {
+      "id": "f27aaed0-55ab-4164-9562-cc8a81a8fa35",
+      "author": "home",
+      "text": "Iteration 4 complete. Target Filtering shipped. Spotticus now correctly filters and prunes output based on the --target flag.",
+      "created_at": "2026-09-01T17:26:15.299567Z"
+    }
+  ],
   "created_at": "2026-09-01T14:02:43.130907Z",
-  "updated_at": "2026-09-01T14:02:43.130907Z",
+  "updated_at": "2026-09-01T17:26:15.299567Z",
   "closed_at": null,
   "custom": {}
 }

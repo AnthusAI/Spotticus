@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "1f1694b0-0c15-4758-bc72-9abf6241c124",
+  "issue_id": "spotticus-5a262406-1371-4031-b952-0f89da7dab98",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T17:39:13.344Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-d3f4c1fd-23ef-47fe-83ac-e077dce7955c",
+    "priority": 2,
+    "status": "open",
+    "title": "Cursor Composer: Write and test composer-spot-worker skill"
+  }
+}

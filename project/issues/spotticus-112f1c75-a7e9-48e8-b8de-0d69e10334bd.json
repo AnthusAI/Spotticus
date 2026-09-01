@@ -1,0 +1,27 @@
+{
+  "id": "spotticus-112f1c75-a7e9-48e8-b8de-0d69e10334bd",
+  "title": "Dummy spot task B: Calculate pi to 100 places locally",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [
+    "spot"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "7b0cb256-ae0d-4aae-ac4e-ab846477611f",
+      "author": "home",
+      "text": "Completed by SpotTester",
+      "created_at": "2026-09-01T16:53:40.799837Z"
+    }
+  ],
+  "created_at": "2026-09-01T16:51:27.063968Z",
+  "updated_at": "2026-09-01T16:53:40.799837Z",
+  "closed_at": "2026-09-01T16:53:40.784709Z",
+  "custom": {}
+}

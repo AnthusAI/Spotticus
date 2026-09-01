@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "1258c68e-b2f0-49bf-939a-6035c944b006",
+  "issue_id": "spotticus-fd1a9dae-d4c1-4035-bb4b-2d4d5d7d5444",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T18:28:22.195Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-24a78e20-92c4-4f04-989b-b7857e59f6c4",
+    "priority": 2,
+    "status": "open",
+    "title": "Spot Curator Skill"
+  }
+}

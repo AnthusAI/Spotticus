@@ -12,7 +12,7 @@ requires-python = ">=3.10"
 authors = [{ name = "Anthus" }]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "behave"]
 
 [tool.setuptools.packages.find]
 include = ["spotticus*"]

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "a30deca6-d3e5-4cac-a9fa-0c3489d1d80c",
+  "issue_id": "spotticus-a64ded58-87c9-4a9e-80c5-ca9d39df94dc",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T18:22:26.400Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": null,
+    "priority": 1,
+    "status": "open",
+    "title": "Another P1 task"
+  }
+}

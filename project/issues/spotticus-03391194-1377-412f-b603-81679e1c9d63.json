@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-03391194-1377-412f-b603-81679e1c9d63",
+  "title": "Spare-pace scoring function",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "1a769267-a5ab-4b3e-a444-873391d6b4e3",
+      "author": "home",
+      "text": "Merged in Iteration 1",
+      "created_at": "2026-09-01T15:40:10.115700Z"
+    }
+  ],
+  "created_at": "2026-09-01T15:19:53.008966Z",
+  "updated_at": "2026-09-01T15:40:10.115700Z",
+  "closed_at": "2026-09-01T15:40:10.106016Z",
+  "custom": {}
+}

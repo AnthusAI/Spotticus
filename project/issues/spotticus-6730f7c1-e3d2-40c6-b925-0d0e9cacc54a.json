@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-6730f7c1-e3d2-40c6-b925-0d0e9cacc54a",
+  "title": "Update status and scoring for per-pool eligibility",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "f96462a8-cec9-48f3-87f4-d8606dad7f50",
+      "author": "home",
+      "text": "Merged in Iteration 3",
+      "created_at": "2026-09-01T17:08:25.172267Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:02:20.570864Z",
+  "updated_at": "2026-09-01T17:08:25.172267Z",
+  "closed_at": "2026-09-01T17:08:25.162157Z",
+  "custom": {}
+}

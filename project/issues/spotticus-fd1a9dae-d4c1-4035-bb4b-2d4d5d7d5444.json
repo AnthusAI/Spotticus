@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-fd1a9dae-d4c1-4035-bb4b-2d4d5d7d5444",
+  "title": "Spot Curator Skill",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-24a78e20-92c4-4f04-989b-b7857e59f6c4",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T18:28:22.195331Z",
+  "updated_at": "2026-09-01T18:28:22.244774Z",
+  "closed_at": "2026-09-01T18:28:22.244774Z",
+  "custom": {}
+}

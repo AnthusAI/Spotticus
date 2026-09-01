@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "ed480339-fc5d-4c59-bfbf-1d2da9edb1a6",
+  "issue_id": "spotticus-f91336c9-ee40-444f-b26f-ac828c7d3a1b",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T16:22:53.298Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "Update status CLI and scoring to evaluate locks"
+  }
+}

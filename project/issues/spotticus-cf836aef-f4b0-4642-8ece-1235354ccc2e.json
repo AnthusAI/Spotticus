@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-cf836aef-f4b0-4642-8ece-1235354ccc2e",
+  "title": "Refactor codexbar parser for extraRateWindows and Pools",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "f7239dec-7adf-4e3f-9002-6f82cf52a111",
+      "author": "home",
+      "text": "Merged in Iteration 3",
+      "created_at": "2026-09-01T17:08:25.114319Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:02:20.406077Z",
+  "updated_at": "2026-09-01T17:08:25.114319Z",
+  "closed_at": "2026-09-01T17:08:25.104699Z",
+  "custom": {}
+}

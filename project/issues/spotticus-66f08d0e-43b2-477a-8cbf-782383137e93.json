@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-66f08d0e-43b2-477a-8cbf-782383137e93",
+  "title": "CLI hold subcommand and SIGTERM preemption",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "a5023eba-6dcb-4ccc-856c-f98b1490bf5c",
+      "author": "home",
+      "text": "Merged in Iteration 2",
+      "created_at": "2026-09-01T16:32:05.521720Z"
+    }
+  ],
+  "created_at": "2026-09-01T16:22:53.255355Z",
+  "updated_at": "2026-09-01T16:32:05.521720Z",
+  "closed_at": "2026-09-01T16:32:05.511928Z",
+  "custom": {}
+}

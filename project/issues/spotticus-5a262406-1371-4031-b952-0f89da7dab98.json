@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-5a262406-1371-4031-b952-0f89da7dab98",
+  "title": "Cursor Composer: Write and test composer-spot-worker skill",
+  "description": "",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-d3f4c1fd-23ef-47fe-83ac-e077dce7955c",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T17:39:13.344071Z",
+  "updated_at": "2026-09-01T17:39:13.344071Z",
+  "closed_at": null,
+  "custom": {}
+}

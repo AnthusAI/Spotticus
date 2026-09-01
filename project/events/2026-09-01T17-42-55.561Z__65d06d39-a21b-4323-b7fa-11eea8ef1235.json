@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "event_id": "65d06d39-a21b-4323-b7fa-11eea8ef1235",
+  "issue_id": "spotticus-5c847e59-81a7-4995-85dc-d936597512c3",
+  "event_type": "field_updated",
+  "occurred_at": "2026-09-01T17:42:55.561Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "labels": {
+        "from": [
+          "spot",
+          "target:antigravity"
+        ],
+        "to": [
+          "spot:antigravity",
+          "spot:cursor"
+        ]
+      }
+    }
+  }
+}

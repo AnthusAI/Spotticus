@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "152c8fb4-9a55-400b-8830-7042a09093f4",
+  "issue_id": "spotticus-85e1bfb7-448a-4762-a364-180f58e930e6",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T18:27:44.100Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [
+      "spot:cursor"
+    ],
+    "parent": null,
+    "priority": 2,
+    "status": "open",
+    "title": "Task A 1788287264.089487"
+  }
+}

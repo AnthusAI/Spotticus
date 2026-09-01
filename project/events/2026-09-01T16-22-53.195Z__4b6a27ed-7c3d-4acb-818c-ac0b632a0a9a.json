@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "4b6a27ed-7c3d-4acb-818c-ac0b632a0a9a",
+  "issue_id": "spotticus-d31a5963-db25-403b-b68d-db3142b7a04b",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T16:22:53.195Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "CLI claim and release subcommands"
+  }
+}

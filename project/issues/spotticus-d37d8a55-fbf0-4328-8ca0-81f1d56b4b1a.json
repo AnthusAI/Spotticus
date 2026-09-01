@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-d37d8a55-fbf0-4328-8ca0-81f1d56b4b1a",
+  "title": "LeftoverProbe ABC and CodexBar probe module",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "437ea361-5da2-4bca-a432-863ec302b780",
+      "author": "home",
+      "text": "Merged in Iteration 1",
+      "created_at": "2026-09-01T15:40:10.096201Z"
+    }
+  ],
+  "created_at": "2026-09-01T15:19:52.168497Z",
+  "updated_at": "2026-09-01T15:40:10.096201Z",
+  "closed_at": "2026-09-01T15:40:10.086430Z",
+  "custom": {}
+}

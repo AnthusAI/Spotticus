@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-f91336c9-ee40-444f-b26f-ac828c7d3a1b",
+  "title": "Update status CLI and scoring to evaluate locks",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "ce0819bf-af16-4e42-a2a9-a6fea798e48a",
+      "author": "home",
+      "text": "Merged in Iteration 2",
+      "created_at": "2026-09-01T16:32:05.542869Z"
+    }
+  ],
+  "created_at": "2026-09-01T16:22:53.297945Z",
+  "updated_at": "2026-09-01T16:32:05.542869Z",
+  "closed_at": "2026-09-01T16:32:05.532347Z",
+  "custom": {}
+}

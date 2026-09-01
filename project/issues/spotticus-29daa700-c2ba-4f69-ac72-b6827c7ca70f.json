@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-29daa700-c2ba-4f69-ac72-b6827c7ca70f",
+  "title": "Prune unrequested pools from output formatters",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "0eb76623-7828-4815-a335-c2bfc1bb5535",
+      "author": "home",
+      "text": "Merged in Iteration 4",
+      "created_at": "2026-09-01T17:26:15.254254Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:19:21.649260Z",
+  "updated_at": "2026-09-01T17:26:15.254254Z",
+  "closed_at": "2026-09-01T17:26:15.231566Z",
+  "custom": {}
+}

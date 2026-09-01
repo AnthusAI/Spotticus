@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "event_id": "84fe6fd0-2dd2-4bfc-b8a4-6955eb44e54f",
+  "issue_id": "spotticus-935ab361-4603-439c-9ae7-a02aba39add9",
+  "event_type": "state_transition",
+  "occurred_at": "2026-09-01T16:32:05.456Z",
+  "actor_id": "home",
+  "payload": {
+    "from_status": "in_progress",
+    "to_status": "closed"
+  }
+}

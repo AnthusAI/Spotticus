@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-f71f3d96-7ffa-4f5e-88d4-699552349687",
+  "title": "Update LockManager and CLI for provider:pool targets",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "05aa603c-95d9-4743-a46c-33bcfcab7f25",
+      "author": "home",
+      "text": "Merged in Iteration 3",
+      "created_at": "2026-09-01T17:08:25.137245Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:02:20.529276Z",
+  "updated_at": "2026-09-01T17:08:25.137245Z",
+  "closed_at": "2026-09-01T17:08:25.124930Z",
+  "custom": {}
+}

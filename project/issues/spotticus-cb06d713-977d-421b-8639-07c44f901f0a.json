@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-cb06d713-977d-421b-8639-07c44f901f0a",
+  "title": "Optimize codexbar probe to fetch only requested providers",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-3d9b9e76-001f-4735-af21-8faa665c1c84",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "3ac0e9f0-3032-4d0c-8825-8caa69f4ba41",
+      "author": "home",
+      "text": "Merged in Iteration 4",
+      "created_at": "2026-09-01T17:26:15.219153Z"
+    }
+  ],
+  "created_at": "2026-09-01T17:19:21.590368Z",
+  "updated_at": "2026-09-01T17:26:15.219153Z",
+  "closed_at": "2026-09-01T17:26:15.208335Z",
+  "custom": {}
+}

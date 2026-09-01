@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "7d42b25a-d841-41b2-8ee0-a233be37b8d4",
+  "issue_id": "spotticus-66f08d0e-43b2-477a-8cbf-782383137e93",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T16:22:53.255Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "CLI hold subcommand and SIGTERM preemption"
+  }
+}

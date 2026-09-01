@@ -1,0 +1,20 @@
+{
+  "id": "spotticus-36756c1d-1c16-4d33-9f28-717e245fc5a9",
+  "title": "Gemini Only Task",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [
+    "spot:antigravity.gemini"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T18:25:08.073766Z",
+  "updated_at": "2026-09-01T18:25:29.526247Z",
+  "closed_at": "2026-09-01T18:25:29.526247Z",
+  "custom": {}
+}
