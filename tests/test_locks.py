@@ -60,12 +60,15 @@ def test_claim_lock_stale(mock_locks_dir, mock_is_alive):
 
 def test_release_lock_success(mock_locks_dir, mock_is_alive):
     claim_lock("providerD", "prod", "mod", "bot1", 1234)
-    assert release_lock("providerD", 1234) is True
+    success, reason = release_lock("providerD", 1234)
+    assert success is True
     assert read_lock("providerD") is None
 
 def test_release_lock_wrong_pid(mock_locks_dir, mock_is_alive):
     claim_lock("providerE", "prod", "mod", "bot1", 1234)
-    assert release_lock("providerE", 5678) is False
+    success, reason = release_lock("providerE", 5678)
+    assert success is False
+    assert "PID mismatch" in reason
     assert read_lock("providerE") is not None
 
 def test_hold_lock(mock_locks_dir, mock_is_alive):
@@ -88,4 +91,14 @@ def test_hold_lock_no_process(mock_locks_dir, mock_is_alive):
 
 def test_release_held_lock(mock_locks_dir, mock_is_alive):
     hold_lock("providerH")
-    assert release_lock("providerH", -1) is False
+    success, reason = release_lock("providerH", -1)
+    assert success is False
+    assert "HELD lock" in reason
+
+def test_unhold_lock(mock_locks_dir, mock_is_alive):
+    hold_lock("providerI")
+    assert read_lock("providerI").state == LockState.HELD
+    
+    from spotticus.locks import unhold_lock
+    unhold_lock("providerI")
+    assert read_lock("providerI") is None

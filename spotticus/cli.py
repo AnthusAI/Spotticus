@@ -11,7 +11,7 @@ from spotticus.probes.codexbar import CodexBarProbe
 from spotticus.scoring import score_provider
 
 
-from spotticus.locks import claim_lock, release_lock, hold_lock
+from spotticus.locks import claim_lock, release_lock, hold_lock, unhold_lock
 
 def _cmd_status(args: argparse.Namespace) -> int:
     """Probe all providers and display their spare capacity status."""
@@ -118,7 +118,7 @@ def _cmd_claim(args: argparse.Namespace) -> int:
 
 
 def _cmd_release(args: argparse.Namespace) -> int:
-    success = release_lock(
+    success, reason = release_lock(
         provider=args.provider,
         pid=args.pid
     )
@@ -126,13 +126,19 @@ def _cmd_release(args: argparse.Namespace) -> int:
         print(f"Lock released for provider {args.provider}.")
         return 0
     else:
-        print(f"Failed to release lock. Either not locked, PID mismatch, or it is HELD.", file=sys.stderr)
+        print(f"Failed to release lock. {reason}", file=sys.stderr)
         return 1
 
 
 def _cmd_hold(args: argparse.Namespace) -> int:
     hold_lock(args.provider)
     print(f"Lock preempted and held for provider {args.provider}.")
+    return 0
+
+
+def _cmd_unhold(args: argparse.Namespace) -> int:
+    unhold_lock(args.provider)
+    print(f"Lock unconditionally removed for provider {args.provider}.")
     return 0
 
 
@@ -172,7 +178,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # -- claim --
     claim_parser = subparsers.add_parser("claim", help="Claim spare capacity for a provider.")
-    claim_parser.add_argument("--provider", required=True, help="Provider to claim.")
+    claim_parser.add_argument("provider", help="Provider to claim.")
     claim_parser.add_argument("--product", required=True, help="Product name.")
     claim_parser.add_argument("--model", required=True, help="Model name.")
     claim_parser.add_argument("--name", required=True, help="Bot or session name.")
@@ -181,12 +187,16 @@ def main(argv: list[str] | None = None) -> int:
 
     # -- release --
     release_parser = subparsers.add_parser("release", help="Release a claimed provider.")
-    release_parser.add_argument("--provider", required=True, help="Provider to release.")
+    release_parser.add_argument("provider", help="Provider to release.")
     release_parser.add_argument("--pid", type=int, required=True, help="Process ID of the agent releasing.")
 
     # -- hold --
     hold_parser = subparsers.add_parser("hold", help="Preempt and hold a provider lock.")
-    hold_parser.add_argument("--provider", required=True, help="Provider to hold.")
+    hold_parser.add_argument("provider", help="Provider to hold.")
+
+    # -- unhold --
+    unhold_parser = subparsers.add_parser("unhold", help="Unconditionally remove a provider's lock (even if HELD).")
+    unhold_parser.add_argument("provider", help="Provider to unhold.")
 
     args = parser.parse_args(argv)
 
@@ -198,6 +208,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_release(args)
     elif args.command == "hold":
         return _cmd_hold(args)
+    elif args.command == "unhold":
+        return _cmd_unhold(args)
     else:
         parser.print_help()
         print(

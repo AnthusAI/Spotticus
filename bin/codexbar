@@ -1,0 +1,2 @@
+#!/bin/bash
+cat /tmp/spotticus-iter2-locks/tests/fixtures/codexbar_claude.json

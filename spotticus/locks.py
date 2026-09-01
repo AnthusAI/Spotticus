@@ -139,21 +139,21 @@ def claim_lock(provider: str, product: str, model: str, name: str, pid: int, ses
         return True
 
 
-def release_lock(provider: str, pid: int) -> bool:
+def release_lock(provider: str, pid: int) -> tuple[bool, str]:
     """
     Release a claim lock if the pid matches. HELD locks are ignored.
-    Returns True if successfully released, False if not matching or HELD.
+    Returns (True, "") if successfully released, or (False, "reason") if failed.
     """
     with acquire_provider_lock(provider) as f:
         current_lock = _load_lock_data(f)
         if current_lock is None:
-            return True  # Already unlocked
+            return True, ""  # Already unlocked
             
         if current_lock.state == LockState.HELD:
-            return False  # Cannot release a HELD lock with `release`
+            return False, "Cannot release a HELD lock. Use 'spotticus unhold' instead."
             
         if current_lock.pid != pid:
-            return False  # Not our lock
+            return False, f"PID mismatch. Expected {current_lock.pid}, got {pid}."
             
         # Clear the lockfile
         f.seek(0)
@@ -164,7 +164,21 @@ def release_lock(provider: str, pid: int) -> bool:
             get_lock_path(provider).unlink(missing_ok=True)
         except OSError:
             pass
-        return True
+        return True, ""
+
+
+def unhold_lock(provider: str) -> None:
+    """
+    Unconditionally removes the lockfile if it exists, regardless of its state.
+    """
+    with acquire_provider_lock(provider) as f:
+        # Clear the lockfile
+        f.seek(0)
+        f.truncate(0)
+        try:
+            get_lock_path(provider).unlink(missing_ok=True)
+        except OSError:
+            pass
 
 
 def hold_lock(provider: str) -> None:
