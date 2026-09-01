@@ -76,10 +76,13 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
 
         if provider == "antigravity":
             extra_windows = usage_data.get("extraRateWindows", [])
-            for win_data in extra_windows:
+            for win_wrapper in extra_windows:
+                if not isinstance(win_wrapper, dict):
+                    continue
+                win_id = win_wrapper.get("id", "unknown")
+                win_data = win_wrapper.get("window")
                 if not isinstance(win_data, dict):
                     continue
-                win_id = win_data.get("id", "unknown")
                 parsed_win = _parse_window(win_id, win_data)
                 if not parsed_win:
                     error = f"Malformed window in extraRateWindows: '{win_id}'"
@@ -93,7 +96,7 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
                     pools.setdefault("default", []).append(parsed_win)
         
         elif provider == "cursor":
-            for key in ["primary", "secondary", "tertiary", "cursor-grok-bot"]:
+            for key in ["primary", "secondary", "tertiary"]:
                 win_data = usage_data.get(key)
                 if not isinstance(win_data, dict):
                     continue
@@ -106,10 +109,21 @@ def parse_codexbar_json(json_str: str) -> ProbeReport:
                     pools.setdefault("premium", []).append(parsed_win)
                 elif key == "tertiary":
                     pools.setdefault("cursor-models", []).append(parsed_win)
-                elif key == "cursor-grok-bot":
-                    pools.setdefault("grok", []).append(parsed_win)
                 else:
                     pools.setdefault("default", []).append(parsed_win)
+            
+            # Parse extraRateWindows for grok bot
+            extra_windows = usage_data.get("extraRateWindows", [])
+            for win_wrapper in extra_windows:
+                if not isinstance(win_wrapper, dict):
+                    continue
+                win_id = win_wrapper.get("id", "unknown")
+                if win_id == "cursor-grok-bot":
+                    win_data = win_wrapper.get("window")
+                    if isinstance(win_data, dict):
+                        parsed_win = _parse_window(win_id, win_data)
+                        if parsed_win:
+                            pools.setdefault("grok", []).append(parsed_win)
         
         else:
             # Default for claude, codex, etc.
