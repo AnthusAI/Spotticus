@@ -2,7 +2,7 @@
 
 Anthus will curate leftover probes for products we actually run. Other products can land if you:
 
-1. Open a pull request with a working probe (command + JSON shape + windows + reset).
+1. Open a pull request **against `develop`** with a working probe (command + JSON shape + windows + reset).
 2. Stay on the PR until we can reproduce it, or until you provide a recorded fixture (`--json` output plus redacted creds path) we can regression-test.
 3. Document last-verified date and failure mode (fail closed, never dispatch on garbage).
 
@@ -19,7 +19,7 @@ We may not have a seat on that product. “It works on my machine” is not enou
 
 Do not add browser-cookie decryptors. Do not add `api2.cursor.sh` scraping unless that is already the documented method for a named wrapper we call, and the PR pins that wrapper’s version.
 
-Existing named wrappers (not ours): [cclimits](https://github.com/cruzanstx/cclimits), [CodexBar](https://github.com/steipete/CodexBar), [aiquota](https://github.com/kohii/aiquota). Desk gauges at [aiquota.app](https://aiquota.app) are a different product from the aiquota CLI. [aiuse](https://github.com/djbclark/aiuse) aggregates those CLIs; it is not a probe to wrap. See [related-tools.md](related-tools.md) and the unsorted dump in [research/leftover-tool-landscape.md](research/leftover-tool-landscape.md).
+Default leftover community to wrap: [CodexBar](https://github.com/steipete/CodexBar). Next: [OpenUsage.ai](https://github.com/robinebers/openusage), [tokscale](https://github.com/junhoyeo/tokscale) `usage --json`. Spend-only: [ccusage](https://github.com/ccusage/ccusage). Glue, not hubs: [aiquota](https://github.com/kohii/aiquota), [aiuse](https://github.com/djbclark/aiuse). See [related-tools.md](related-tools.md) and [research/leftover-tool-landscape.md](research/leftover-tool-landscape.md).
 
 ## Kanbus
 

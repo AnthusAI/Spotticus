@@ -2,6 +2,10 @@
 
 Spot tasks fill leftover included quota. They are interruptible. On-demand (a human, or a job the human started) preempts them.
 
+Healthy leftover communities (CodexBar, OpenUsage.ai, tokscale) **watch**.
+ccusage watches the bill. They do not dispatch. Spotticus is the dispatch
+layer on top of leftover probes.
+
 Kanbus is the queue. Open chores labeled `spot` are eligible. Spotticus does not own a second backlog.
 
 ## When leftover is “spare”

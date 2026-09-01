@@ -17,29 +17,52 @@ labeled `spot` are the queue.
 
 Two jobs:
 
-1. Curate leftover probes for products Anthus uses. Wrap existing CLIs
-   (`cclimits`, `codexbar`, `aiquota`, later others). Do not invent scrapers.
-   Products we do not run land only via a working PR plus verification help.
-   Keep [docs/related-tools.md](docs/related-tools.md) current
-   (`https://github.com/kohii/aiquota`, `https://aiquota.app`,
-   `https://github.com/djbclark/aiuse`). Dump new findings into
-   [docs/research/leftover-tool-landscape.md](docs/research/leftover-tool-landscape.md);
-   do not silently pick a wrap target.
+1. Curate leftover probes for products Anthus uses. Follow **CodexBar**
+   first for live leftover (`codexbar usage --json`). Next leftover
+   communities: OpenUsage.ai, then tokscale `usage --json`. **ccusage** is
+   historical spend from local logs, not remaining-%. aiuse and aiquota are
+   real glue, not the community. Do not invent scrapers. Products we do
+   not run land only via a working PR plus verification help. Keep
+   [docs/related-tools.md](docs/related-tools.md) current. Dump new
+   findings into
+   [docs/research/leftover-tool-landscape.md](docs/research/leftover-tool-landscape.md).
 2. Dispatch interruptible chores when leftover is behind linear pace.
-   Assume one agentic invocation may burn the rest of a window. One live
-   spot run per pool. Re-probe after each chore. Fail closed.
+   The healthy leftover repos watch; they do not dispatch. That gap is
+   Spotticus. Assume one agentic invocation may burn the rest of a
+   window. One live spot run per pool. Re-probe after each chore. Fail
+   closed.
 
 Read `docs/leftover.md` and `docs/dispatch.md` before changing probe or
 dispatch behavior.
 
+## Git
+
 This repository is its own git repo. Do not commit Spotticus into the
 parent `~/Projects` checkout.
 
-`develop` is the integration branch if one exists; `main` is release.
-Semantic-release runs from `main`. Do not merge to `main` as daily
-integration. Git Flow details (Chattic-style `develop` as CI, PRs against
-`develop`, humans promote to `main`) are not copied here yet; discuss
-before stealing that policy.
+`develop` is the continuous-integration branch. Merge accepted, green work
+there as soon as it is ready. Do not park completed work on long-lived
+feature branches waiting for `main`.
+
+`main` is the release branch. Semantic-release runs only from `main`.
+Do not treat a merge to `develop` as a production release. The release
+workflow is local to this repo and authenticates with `GITHUB_TOKEN`;
+do not call the platform-ci reusable workflow, which requires an
+`anthusbot_gh_token` this repository does not have.
+
+Open pull requests against `develop`. Merge them there as soon as
+sub-agent review is addressed and CI is green. Do not park completed
+work on feature branches. Humans promote `develop` to `main` when they
+intend a release, not as the daily integration path.
+
+## Pull request review
+
+No human GitHub reviewer will show up. Review is done in this session with
+**Composer 2.5** (and Bugbot when a branch diff should be checked)
+sub-agents. Do not mark a PR ready and wait. Launch a reviewer against
+`develop`, treat request-changes as blocking, and have a second agent
+apply fixes. Approval from that loop is the merge gate, not a person on
+the PR.
 
 No emojis. No second issue store beside Kanbus.
 

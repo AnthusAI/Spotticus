@@ -16,10 +16,16 @@
       "author": "home",
       "text": "Research dump for leftover probes: docs/research/leftover-tool-landscape.md. Includes aiquota (github.com/kohii/aiquota), aiquota.app, aiuse (github.com/djbclark/aiuse), plus community hubs (CodexBar, ccusage spend-only, tokscale, claude-swap, Claude-Code-Usage-Monitor, Win-CodexBar) and smaller CLIs. Unsorted; later agents should pick a wrap hub. Not a wrap decision.",
       "created_at": "2026-09-01T14:12:15.608189Z"
+    },
+    {
+      "id": "cbc6a7d4-9beb-40d8-8420-1b0d95b41f36",
+      "author": "home",
+      "text": "Settled ranking from a second session: CodexBar first for live leftover, then OpenUsage.ai (robinebers/openusage, local 127.0.0.1:6736/v1/limits), then tokscale usage --json. ccusage is historical spend, not remaining-%. aiuse/aiquota are glue, not the community. Skip Claude-Code-Usage-Monitor (last push 2026-07). Healthy repos watch; they do not dispatch. Recorded in docs/research/leftover-tool-landscape.md and docs/related-tools.md.",
+      "created_at": "2026-09-01T14:25:58.111558Z"
     }
   ],
   "created_at": "2026-09-01T14:02:56.211016Z",
-  "updated_at": "2026-09-01T14:12:15.608189Z",
+  "updated_at": "2026-09-01T14:25:58.111558Z",
   "closed_at": null,
   "custom": {}
 }

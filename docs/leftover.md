@@ -12,7 +12,8 @@ Server-side leftover, not local JSONL spend:
 - reset time
 - which window (session 5h, weekly, monthly pool)
 
-`codexbar cost` / tokscale log scans are a different number. Do not mix them into dispatch.
+`codexbar cost` / `ccusage` / tokscale log scans are a different number
+(historical spend). Do not mix them into dispatch.
 
 ## Anthus cares about (first catalog)
 
@@ -26,17 +27,23 @@ Server-side leftover, not local JSONL spend:
 
 ## Tools we wrap or consult (keep these URLs)
 
-Full catalog: [related-tools.md](related-tools.md). Unsorted research packet for other agents: [research/leftover-tool-landscape.md](research/leftover-tool-landscape.md). Three that must not be dropped again:
+Full catalog: [related-tools.md](related-tools.md). Landscape dump:
+[research/leftover-tool-landscape.md](research/leftover-tool-landscape.md).
 
-- **[aiquota](https://github.com/kohii/aiquota)** — Go CLI. Claude / Codex / Cursor / Copilot from local creds. `--json`. No cookie decrypt. `--proj` is spare-pace coloring.
-- **[AIQuota for macOS](https://aiquota.app)** — menu-bar gauges + widgets for Codex and Claude. Browser-backed sessions. **Different product** from kohii/aiquota.
-- **[aiuse](https://github.com/djbclark/aiuse)** — Python aggregator (`pipx install aiuse`). Shells out to CodexBar, caut, cswap, tokscale, OpenUsage. Ranks use-it-or-lose-it. Not a first-party probe.
+Two jobs, two communities:
 
-Portable vs richest among leftover CLIs:
+- **Live leftover** (remaining %, reset): follow **[CodexBar](https://github.com/steipete/CodexBar)** first (`codexbar usage --json`). Next: **[OpenUsage.ai](https://www.openusage.ai)** ([robinebers/openusage](https://github.com/robinebers/openusage), local `127.0.0.1:6736/v1/limits`), then **[tokscale](https://github.com/junhoyeo/tokscale)** `tokscale usage --json`.
+- **Historical spend** (what you already burned, local JSONL): **[ccusage](https://github.com/ccusage/ccusage)** / [ccusage.com](https://ccusage.com). Not remaining-%.
 
-- **Portable leftover CLI we would wrap first:** [cclimits](https://github.com/cruzanstx/cclimits) (Python, file creds, Claude/Codex/Gemini/Antigravity). Not Cursor.
-- **Richest catalog of methods:** [CodexBar](https://github.com/steipete/CodexBar) `docs/` plus `codexbar usage --json`. macOS-first.
-- **Small Go binary including unofficial Cursor:** [aiquota](https://github.com/kohii/aiquota) as above.
+Glue that still belongs in the catalog (0–1 star, not the community):
+
+- **[aiquota](https://github.com/kohii/aiquota)** — Go CLI. `--json`. No cookie decrypt. `--proj` is spare-pace coloring.
+- **[AIQuota for macOS](https://aiquota.app)** — different product from kohii/aiquota.
+- **[aiuse](https://github.com/djbclark/aiuse)** — aggregator over CodexBar and friends. Do not treat it as the community.
+
+Skip **[Claude-Code-Usage-Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)** (popular, last push 2026-07, stalled).
+
+Portable fallback if CodexBar is a poor fit on a given machine: [cclimits](https://github.com/cruzanstx/cclimits) (Python, file creds, Claude/Codex/Gemini/Antigravity, no Cursor).
 
 Spotticus should call these, not reimplement their HTTP. Per-product modules here record: command, JSON path, windows, failure mode, last verified date.
 

@@ -1,23 +1,52 @@
 # Leftover-tool landscape (research dump)
 
-**Status:** unsorted research packet. Not a wrap decision. Not a product spec.
+**Status:** inventory plus a settled ranking (below). Not a product spec.
+Not an implementation of probes.
 
-**For later agents:** read this whole file before ranking, wrapping, or implementing
-probes. Executive agents should pick a hub and a wrap list. Research agents should
-re-verify GitHub signals and whether each tool reports **server-side leftover**
-or only **local spend logs**. Do not collapse those two numbers.
+**For later agents:** the ranking in the next section is the scale to use.
+Do not treat aiuse/aiquota as the community. Re-verify GitHub signals before
+acting. Do not collapse **live leftover** and **historical spend**.
 
 **Snapshot:** 2026-09-01, from GitHub `repos` + `contributors` API plus project
-READMEs. Stars, forks, open issues, last push, and contributor counts will be
-stale by the next vendor URL change. Re-fetch before acting.
+READMEs, plus a second-session ranking. Stars will be stale by the next
+vendor URL change.
 
 **Why this exists:** vendor leftover endpoints are undocumented and rot.
-Spotticus should wrap a living probe, not invent scrapers. Ryan asked for
-well-maintained projects with an **active community** chasing that churn.
-Language does not matter.
+Spotticus should wrap a living probe, not invent scrapers. Language does
+not matter. Nobody in the healthy watch communities is building spot-task
+dispatch; that gap is Spotticus.
 
 Related shorter notes: [../related-tools.md](../related-tools.md),
 [../leftover.md](../leftover.md).
+
+## Settled ranking (2026-09-01)
+
+aiuse and aiquota are real. They do leftover. They are 0–1 star glue: one
+or two people, no community that will keep up when Cursor changes billing.
+
+Two different jobs:
+
+1. **Live leftover** (what is left, when it resets). Follow **CodexBar**
+   first. ~21k stars, 100+ contributors (365 on the GitHub API including
+   bots), commits today, menu bar plus CLI, Codex/Claude/Cursor/Copilot/Grok/Antigravity.
+   That is the project that will chase vendor API churn.
+   Next leftover communities: **OpenUsage.ai**
+   ([robinebers/openusage](https://github.com/robinebers/openusage), ~3971
+   stars this snapshot, macOS menu bar, local API
+   `127.0.0.1:6736/v1/limits`) and **tokscale** (~5k, TUI,
+   `tokscale usage --json`).
+2. **Historical spend** (what you already burned, from local logs).
+   **ccusage** / [ccusage.com](https://ccusage.com). ~18k stars, large npm
+   weekly install base, ~77 contributors. Continuum already wrote a guide.
+   It is not remaining-%. It reads JSONL off disk.
+
+If you follow two: CodexBar for leftover, ccusage for the bill.
+
+Skip the popular-but-stalled
+[Claude-Code-Usage-Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)
+(last push 2026-07). Skip aiuse as “the community.”
+
+The healthy repos **watch**. They do not dispatch.
 
 ## What Spotticus actually needs
 
@@ -46,13 +75,14 @@ A tool can do both. If it does, say which command is leftover.
 | ccusage | [ccusage/ccusage](https://github.com/ccusage/ccusage) (also [ryoppippi/ccusage](https://github.com/ryoppippi/ccusage)) local log cost CLI, ~18k stars; [wakamex/ccusage](https://github.com/wakamex/ccusage) Claude OAuth leftover CLI, 2 stars. **Different products.** |
 | tokscale | [junhoyeo/tokscale](https://github.com/junhoyeo/tokscale) ~5k stars, `tokscale.ai`; [tokscale/tokscale](https://github.com/tokscale/tokscale) 1-star unrelated/collision |
 | CodexBar | [steipete/CodexBar](https://github.com/steipete/CodexBar) upstream; [Finesssee/Win-CodexBar](https://github.com/Finesssee/Win-CodexBar) Windows port; [thalestomme/CodexBar](https://github.com/thalestomme/CodexBar) stale Tauri fork |
-| OpenUsage | [openusage.sh](https://openusage.sh) / [janekbaraniewski/openusage](https://github.com/janekbaraniewski/openusage) terminal dashboard; [openusage.ai](https://www.openusage.ai) macOS menu-bar + loopback `/v1/limits`. aiuse treats them as **distinct collectors**. |
+| OpenUsage | **[OpenUsage.ai](https://www.openusage.ai)** / [robinebers/openusage](https://github.com/robinebers/openusage) (~4k stars) native macOS menu bar + loopback `127.0.0.1:6736/v1/limits`. **[OpenUsage.sh](https://openusage.sh)** / [janekbaraniewski/openusage](https://github.com/janekbaraniewski/openusage) (~180 stars) terminal dashboard. Distinct products. |
 | cswap | [realiti4/claude-swap](https://github.com/realiti4/claude-swap) Claude multi-account leftover (`cswap list --json`); [GoDiao/cswap](https://github.com/GoDiao/cswap) provider-isolation launcher. **Different products.** |
 
-## Community signal (hint only)
+## Community signal (inventory)
 
 GitHub contributor totals include bots. Last-push “today” does not prove
-leftover probes still work. Use this as a **starting rank**, not a wrap list.
+leftover probes still work. The **settled ranking is above**; this table is
+the rest of the inventory.
 
 ### Hubs worth a second look (community + leftover-adjacent)
 
@@ -61,10 +91,11 @@ vendor churn.
 
 | Project | URL | Stars | Contribs | Last push | Lang | Leftover vs spend | Why it is a hub |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| CodexBar | https://github.com/steipete/CodexBar | 20791 | 365 | 2026-09-01 | Swift + Linux CLI | **Leftover** via `codexbar usage --format json`. Cost is a different command. | Richest method catalog (`docs/*.md` per provider). Linux CLI is the contract many desktop ports wrap. Homebrew, AUR, `codexbar serve`. Site: https://codex.bar |
-| ccusage | https://github.com/ccusage/ccusage | 18269 | 77 | 2026-09-01 | Rust | **Spend logs**, not leftover. `npx ccusage`, https://ccusage.com | Largest *cost* community. Do not dispatch on it. Useful as “what people already run.” |
-| tokscale (junhoyeo) | https://github.com/junhoyeo/tokscale | 5238 | 137 | 2026-09-01 | Rust/npm | Mostly **cost**. Also `tokscale usage --json` for live subscription leftover. | Active npm (`tokscale` / `@tokscale/cli`). Site: https://tokscale.ai |
-| Claude-Code-Usage-Monitor | https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor | 8667 | 6 | 2026-07-05 | Python | Mix: local JSONL + later OAuth leftover discussion | Huge star count, **few contributors**, last push ~2 months before this snapshot. Re-check if it is still the Claude leftover community or a popular older TUI. |
+| CodexBar | https://github.com/steipete/CodexBar | 20791 | 365 | 2026-09-01 | Swift + Linux CLI | **Leftover** via `codexbar usage --format json`. Cost is a different command. | **Follow first** for live leftover. |
+| OpenUsage.ai | https://github.com/robinebers/openusage | 3971 | (re-fetch) | 2026-09-01 | Swift | Leftover via `127.0.0.1:6736/v1/limits` | **Second leftover community.** macOS 15+. Not OpenUsage.sh. |
+| tokscale (junhoyeo) | https://github.com/junhoyeo/tokscale | 5238 | 137 | 2026-09-01 | Rust/npm | Cost TUI plus `tokscale usage --json` leftover | **Third leftover community** for live usage JSON. |
+| ccusage | https://github.com/ccusage/ccusage | 18269 | 77 | 2026-09-01 | Rust | **Spend logs**, not leftover. `npx ccusage`, https://ccusage.com | **The bill**, never spare-pace dispatch. |
+| Claude-Code-Usage-Monitor | https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor | 8667 | 6 | 2026-07-05 | Python | Mix | **Skip.** Popular, stalled (last push July 2026). |
 | claude-swap (cswap) | https://github.com/realiti4/claude-swap | 2102 | 40 | 2026-09-01 | Python | **Claude leftover**, multi-account. `cswap list --json` | Active. aiuse calls this the canonical multi-account Claude leftover source. Not multi-product. |
 | Win-CodexBar | https://github.com/Finesssee/Win-CodexBar | 1011 | 75 | 2026-08-31 | Rust | Leftover, Windows tray. Same spirit as CodexBar. | Official-feeling Windows port. Same GitHub user also as nesszer/Win-CodexBar. |
 
@@ -158,28 +189,20 @@ Research:
 1. Re-fetch GitHub stats. Flag anything with last push older than ~30 days.
 2. For each leftover candidate, record: install command, `--json` sample
    (redacted), windows, auth path, last verified date, fail-closed behavior.
-3. Confirm OpenUsage.ai GitHub/source (site fetch timed out this pass).
-4. Identify aiuse’s `muse`, `qwencloud`, `bailian` collectors.
-5. Decide whether Claude-Code-Usage-Monitor is still maintained (stars vs
-   2026-07-05 push vs 6 contributors).
-6. Compare CodexBar Linux CLI vs cclimits vs caut vs aiquota vs tokscale
-   `usage` **on the same machine** for Claude + Codex leftover JSON.
+3. Identify aiuse’s `muse`, `qwencloud`, `bailian` collectors.
+4. Compare CodexBar leftover JSON vs OpenUsage.ai `/v1/limits` vs tokscale
+   `usage --json` **on the same machine** for Claude + Codex + Cursor.
 
-Executive:
+Executive (already ranked, do not re-litigate scale):
 
-1. Pick the **community hub** we will track (likely CodexBar, with satellites
-   as proof). Language is irrelevant.
-2. Pick **one wrap CLI per Anthus product**, with a portable fallback.
-   Current hedge in leftover.md: cclimits portable, CodexBar richest, aiquota
-   for unofficial Cursor.
-3. Explicitly reject wrapping spend-only tools (ccusage daily, vibeusage,
-   tokscale models) for dispatch.
-4. Policy already in contributing-providers.md: no first-party cookie
+1. Wrap CodexBar leftover as the default living probe.
+2. OpenUsage.ai and tokscale `usage` are the next leftover communities.
+3. ccusage is the bill, never spare-pace dispatch.
+4. aiuse/aiquota stay as glue notes. Claude-Code-Usage-Monitor is skipped.
+5. Policy already in contributing-providers.md: no first-party cookie
    decrypt; no first-party `api2.cursor.sh`.
 
 ## What this pass did not do
 
 - Did not run every CLI.
-- Did not rank a winner.
-- Did not copy Chattic Git Flow (see AGENTS.md; discuss first).
 - Did not implement Spotticus probes or dispatch.

@@ -1,51 +1,37 @@
 # Related leftover tools
 
-These are not Spotticus. Spotticus wraps and verifies leftover probes; it does
-not reimplement their HTTP or decrypt browser cookies.
+These are not Spotticus. Spotticus wraps leftover probes and **dispatches**.
+The healthy communities watch. They do not dispatch.
 
-**Unsorted inventory** (stars, collectors, name collisions, open questions):
+Landscape dump (inventory, collisions, satellites):
 [research/leftover-tool-landscape.md](research/leftover-tool-landscape.md).
-Later research and executive agents should sort that packet. This page is the
-short index.
 
-**Do not drop these from the catalog.** They were missed once.
+## Two jobs, two communities
 
-## Named links that must stay in the catalog
+Do not collapse leftover and spend. Do not treat 0–1 star glue as the hub.
+
+| Job | Follow | What it reports |
+| --- | --- | --- |
+| **Live leftover** | **[CodexBar](https://github.com/steipete/CodexBar)** first (~21k stars, commits today, `codexbar usage --json`). Next: **[OpenUsage.ai](https://www.openusage.ai)** ([robinebers/openusage](https://github.com/robinebers/openusage), ~4k, macOS menu bar, `127.0.0.1:6736/v1/limits`). Then **[tokscale](https://github.com/junhoyeo/tokscale)** (~5k, `tokscale usage --json`). | Remaining %, reset, which window. Vendor URLs rot; these communities chase them. |
+| **Historical spend** | **[ccusage](https://github.com/ccusage/ccusage)** / [ccusage.com](https://ccusage.com) (~18k stars). Continuum guide exists. | What you already burned, from local JSONL. **Not remaining-%.** |
+
+Skip **[Claude-Code-Usage-Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor)** (stars, last push July 2026, stalled). Skip **[aiuse](https://github.com/djbclark/aiuse)** as “the community.”
+
+## Glue that must stay in the catalog
+
+Real tools. One or two people. They will not keep up when Cursor changes billing.
 
 | What | URL | Role |
 | --- | --- | --- |
-| **aiquota** (Go CLI) | https://github.com/kohii/aiquota | Machine-readable leftover for Claude, Codex, Cursor, Copilot from local CLI/IDE creds. `--json`. No cookie decrypt. Pace / `--proj` is the same “behind linear reset” idea as Spotticus spare capacity. Tiny repo; method notes, not a community hub. |
-| **AIQuota** (macOS app) | https://aiquota.app | Native menu-bar + widgets for Codex and Claude Code (macOS 15+). Browser-backed ChatGPT/Claude sessions in Keychain. Human gauges, not a dispatch CLI. Source appears to be [niederme/ai-quota](https://github.com/niederme/ai-quota). **Not the same project as kohii/aiquota.** |
-| **aiuse** | https://github.com/djbclark/aiuse | Python aggregator. Shells out to CodexBar, caut, cswap, tokscale, OpenUsage. Ranks use-it-or-lose-it. `aiuse --json`. Not a probe itself. Tiny repo; its collector table is the map. |
+| **aiquota** (Go CLI) | https://github.com/kohii/aiquota | Claude / Codex / Cursor / Copilot leftover from local creds. `--json`. No cookie decrypt. `--proj` is spare-pace. |
+| **AIQuota** (macOS app) | https://aiquota.app | Menu-bar gauges for Codex and Claude. **Different product** from kohii/aiquota. Source: [niederme/ai-quota](https://github.com/niederme/ai-quota). |
+| **aiuse** | https://github.com/djbclark/aiuse | Aggregator. Shells out to CodexBar, caut, cswap, tokscale, OpenUsage. Collector map is useful. Not a hub. |
 
-If you only remember three URLs, remember those three. Then read the research dump.
-
-## Community hubs (leftover-adjacent, not a wrap decision)
-
-Language does not matter. Maintenance and a group chasing vendor URL churn does.
-
-| Tool | URL | Snapshot 2026-09-01 | Role |
-| --- | --- | --- | --- |
-| CodexBar | https://github.com/steipete/CodexBar | ~21k stars, ~365 contribs, push same day | Leftover via `codexbar usage --json`. Method catalog in `docs/`. Linux CLI is what Waybar/KDE/GNOME/COSMIC/Windows ports wrap. |
-| ccusage | https://github.com/ccusage/ccusage | ~18k stars, ~77 contribs | **Local spend logs**, not leftover. Do not dispatch on it. |
-| tokscale | https://github.com/junhoyeo/tokscale | ~5k stars, ~137 contribs | Cost TUI plus bolted-on `tokscale usage --json`. |
-| claude-swap | https://github.com/realiti4/claude-swap | ~2k stars, ~40 contribs | Claude multi-account leftover (`cswap list --json`). |
-| Claude-Code-Usage-Monitor | https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor | ~8.7k stars, 6 contribs, last push 2026-07-05 | Popular Claude TUI; re-check whether the community is still live. |
-| Win-CodexBar | https://github.com/Finesssee/Win-CodexBar | ~1k stars, ~75 contribs | Windows CodexBar port. |
-
-## Same landscape, already in the leftover notes
-
-| Tool | URL | Role |
-| --- | --- | --- |
-| cclimits | https://github.com/cruzanstx/cclimits | Portable leftover CLI (Python). Claude, Codex, Gemini, Antigravity. **No Cursor.** Thin community. |
-| caut | https://github.com/Dicklesworthstone/coding_agent_usage_tracker | Independent multi-provider leftover (CodexBar-class). Solo. |
-| OpenUsage.sh | https://github.com/janekbaraniewski/openusage | Terminal dashboard; mix of leftover, spend, local telemetry. |
+OpenUsage.sh ([janekbaraniewski/openusage](https://github.com/janekbaraniewski/openusage), ~180 stars) is **not** OpenUsage.ai.
 
 ## How Spotticus should treat them
 
-- **Wrap a named leftover CLI** per product. Pin version. Fail closed.
-- Prefer a hub that other people will patch when Anthropic/OpenAI/Cursor move URLs.
-- **aiuse** is a ranking UI over those CLIs. Useful as a human check; not the probe we pin.
-- **aiquota.app** is desk visibility. It does not replace a `--json` leftover probe.
-- **ccusage** (the 18k-star one) is cost. Do not mix it into dispatch.
-- Do not invent `api2.cursor.sh` scraping. Cursor leftover, if we pin it, comes from a named wrapper that already does `state.vscdb` + `cursor.com/api/usage-summary` (CodexBar, aiquota).
+- Wrap **CodexBar leftover** (`codexbar usage --format json`) as the default live probe, with OpenUsage.ai / tokscale `usage` as next communities.
+- Use **ccusage** only if we need a bill / local-cost number. Never for spare-pace dispatch.
+- Portable fallback: [cclimits](https://github.com/cruzanstx/cclimits). Unofficial Cursor also exists in CodexBar and aiquota.
+- Do not invent `api2.cursor.sh` scraping.

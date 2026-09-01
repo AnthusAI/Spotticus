@@ -9,4 +9,6 @@ Project scaffold: leftover-probe catalog notes, dispatch policy notes,
 Kanbus, MIT license, semantic-release wiring. Related-tool catalog names
 aiquota (GitHub CLI and aiquota.app) and aiuse. Research dump of the
 leftover-tool landscape (CodexBar, ccusage, tokscale, claude-swap, and
-others) for later agents.
+others) for later agents. Settled ranking: CodexBar for leftover,
+ccusage for the bill; skip stalled Claude-Code-Usage-Monitor; Git Flow
+with `develop` as integration.
