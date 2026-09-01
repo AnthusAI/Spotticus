@@ -1,0 +1,20 @@
+{
+  "id": "spotticus-d4da5297-38ae-4d22-84b0-addb11b8b44a",
+  "title": "Task A 1788293571.238684",
+  "description": "",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [
+    "spot:cursor"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T20:12:51.248389Z",
+  "updated_at": "2026-09-01T20:12:51.248389Z",
+  "closed_at": null,
+  "custom": {}
+}

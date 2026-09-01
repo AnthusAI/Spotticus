@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "event_id": "db70c4fa-a932-4cc6-b695-bee023361610",
+  "issue_id": "spotticus-5a262406-1371-4031-b952-0f89da7dab98",
+  "event_type": "comment_added",
+  "occurred_at": "2026-09-01T19:48:03.019Z",
+  "actor_id": "home",
+  "payload": {
+    "comment_author": "home",
+    "comment_id": "1694c85b-2523-45ec-a025-c0be6e2a9a22"
+  }
+}

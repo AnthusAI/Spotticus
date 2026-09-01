@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "9c5d26e7-f881-4e5e-bf5f-4d3497b8ac0d",
+  "issue_id": "spotticus-9d27aa8e-5f08-40e5-8311-69a37cae91a9",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T20:15:14.369Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [
+      "spot:antigravity.gemini"
+    ],
+    "parent": null,
+    "priority": 2,
+    "status": "open",
+    "title": "Gemini Only Task 1788293714.359152"
+  }
+}

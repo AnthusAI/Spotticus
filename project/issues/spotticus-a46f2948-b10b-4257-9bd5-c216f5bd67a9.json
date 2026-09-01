@@ -1,0 +1,25 @@
+{
+  "id": "spotticus-a46f2948-b10b-4257-9bd5-c216f5bd67a9",
+  "title": "Claude Code spot dispatch is capped, preemptible, and fail-closed",
+  "description": "As the Spotticus dispatch oracle, I want the Claude Code trigger to dispatch a headless\nworker only when `claude.default` is genuinely spare, so that leftover quota is used\nwithout a runaway agent draining a window or wedging the pool.\n\nExecutable form: `features/04_claude_dispatch.feature`.\n\n```gherkin\nFeature: Claude Code spot dispatch\n\n  Scenario: A pool that is not spare is not dispatched\n    Given the \"claude.spectest\" pool is not spare\n    When the Claude spot trigger runs\n    Then the Claude CLI is not invoked\n    And no lock remains for \"claude.spectest\"\n\n  Scenario: A failed probe is not dispatched\n    Given the leftover probe fails\n    When the Claude spot trigger runs\n    Then the Claude CLI is not invoked\n    And no lock remains for \"claude.spectest\"\n\n  Scenario: A spare pool dispatches a headless worker\n    Given the \"claude.spectest\" pool is spare\n    When the Claude spot trigger runs\n    Then the Claude CLI is invoked in non-interactive mode\n    And the worker prompt contains the Claude spot worker skill\n    And no lock remains for \"claude.spectest\"\n\n  Scenario: A pool already running a spot job is not dispatched twice\n    Given the \"claude.spectest\" pool is spare\n    And the pool is already locked by another agent\n    When the Claude spot trigger runs\n    Then the Claude CLI is not invoked\n\n  Scenario: A failed worker still releases the pool\n    Given the \"claude.spectest\" pool is spare\n    And the Claude CLI will exit with a failure\n    When the Claude spot trigger runs\n    Then no lock remains for \"claude.spectest\"\n    And the claimed Kanbus chore is reopened\n\n  Scenario: A worker that overruns its cap is terminated\n    Given the \"claude.spectest\" pool is spare\n    And the Claude CLI will hang\n    And the run cap is 1 second\n    When the Claude spot trigger runs\n    Then the trigger terminates the worker\n    And no lock remains for \"claude.spectest\"\n    And the claimed Kanbus chore is reopened\n\n  Scenario: An on-demand hold preempts a running spot job\n    Given the \"claude.spectest\" pool is spare\n    And the Claude CLI will hang\n    When the Claude spot trigger runs and the pool is held\n    Then the trigger terminates the worker\n    And the lock for \"claude.spectest\" remains HELD\n    And the claimed Kanbus chore is reopened\n```\n\nDefinition of Done: all scenarios green under behave; pytest still green; the trigger is\nsafe to run from cron.",
+  "type": "story",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-d3f4c1fd-23ef-47fe-83ac-e077dce7955c",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "9a447486-2749-4e41-981a-101c3d89db52",
+      "author": "home",
+      "text": "All seven scenarios green in features/04_claude_dispatch.feature. Definition of Done met: behave and pytest both green, and the trigger is cron-safe (absolute repo root resolution, fail-closed probe, lock released on every exit path).",
+      "created_at": "2026-09-01T20:16:40.777722Z"
+    }
+  ],
+  "created_at": "2026-09-01T20:04:18.929464Z",
+  "updated_at": "2026-09-01T20:16:40.789224Z",
+  "closed_at": "2026-09-01T20:16:40.789224Z",
+  "custom": {}
+}

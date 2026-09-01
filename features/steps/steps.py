@@ -196,3 +196,263 @@ def step_impl(context):
     # A and C are both P2, so their order is nondeterministic (depends on their random hex ID)
     assert any(context.task_titles["A"] in line for line in context.sorted_tasks[1:]), f"A not found in tail: {context.sorted_tasks}"
     assert any(context.task_titles["C"] in line for line in context.sorted_tasks[1:]), f"C not found in tail: {context.sorted_tasks}"
+
+
+# --- Claude Spot Dispatch ---
+
+import tempfile
+import time
+
+SPEC_TARGET = "claude.spectest"
+SPEC_LOCK_PATH = os.path.expanduser(f"~/.spotticus/locks/{SPEC_TARGET}.json")
+REAL_SPOTTICUS = os.path.abspath(".venv/bin/spotticus")
+TRIGGER = os.path.abspath("scripts/trigger_claude.sh")
+
+# The status stub reproduces the real CLI's output verbatim, emoji included, so the
+# trigger's eligibility check is specified against the format it will really meet.
+STUB_SPOTTICUS = f"""#!/bin/bash
+if [ "$1" = "status" ]; then
+    case "${{SPEC_STATUS_MODE:-spare}}" in
+        spare)
+            echo "CLAUDE:"
+            echo "  spectest        \N{LARGE GREEN CIRCLE} ELIGIBLE"
+            exit 0
+            ;;
+        fail)
+            echo "Probe failed: spec forced probe failure" >&2
+            exit 1
+            ;;
+        *)
+            echo "CLAUDE:"
+            echo "  spectest        \N{LARGE RED CIRCLE} SKIP: Not all windows spare"
+            exit 1
+            ;;
+    esac
+fi
+exec "{REAL_SPOTTICUS}" "$@"
+"""
+
+STUB_CLAUDE = """#!/bin/bash
+printf '%s\\n' "$@" > "$SPEC_CLAUDE_ARGV"
+
+# Stand in for the worker claiming a Kanbus chore, so the trigger has something to reopen.
+if [ -n "${SPEC_TASK_ID:-}" ] && [ -n "${SPOTTICUS_TASK_FILE:-}" ]; then
+    printf '%s\\n' "$SPEC_TASK_ID" > "$SPOTTICUS_TASK_FILE"
+fi
+
+case "${SPEC_CLAUDE_MODE:-ok}" in
+    fail)
+        exit 3
+        ;;
+    hang)
+        trap 'printf terminated > "$SPEC_TERM_MARKER"; exit 143' TERM
+        sleep 120 &
+        wait $!
+        ;;
+esac
+exit 0
+"""
+
+
+def _spec_setup(context):
+    """Lay down the stub binaries the trigger will be pointed at."""
+    if hasattr(context, "spec_dir"):
+        return
+    context.spec_dir = tempfile.mkdtemp(prefix="spot-claude-spec-")
+    context.claude_argv = os.path.join(context.spec_dir, "claude_argv")
+    context.term_marker = os.path.join(context.spec_dir, "terminated")
+    context.status_mode = "spare"
+    context.claude_mode = "ok"
+    context.spec_task_id = ""
+    context.max_seconds = "60"
+
+    context.stub_spotticus = os.path.join(context.spec_dir, "spotticus")
+    context.stub_claude = os.path.join(context.spec_dir, "claude")
+    for path, body in (
+        (context.stub_spotticus, STUB_SPOTTICUS),
+        (context.stub_claude, STUB_CLAUDE),
+    ):
+        with open(path, "w") as f:
+            f.write(body)
+        os.chmod(path, 0o755)
+
+
+def _spec_env(context):
+    env = os.environ.copy()
+    env.update({
+        "SPOTTICUS_CMD": context.stub_spotticus,
+        "CLAUDE_BIN": context.stub_claude,
+        "SPOTTICUS_TARGET": SPEC_TARGET,
+        "SPOT_MAX_SECONDS": context.max_seconds,
+        "SPOT_GRACE_SECONDS": "5",
+        "SPOT_LOG_DIR": os.path.join(context.spec_dir, "logs"),
+        "SPEC_STATUS_MODE": context.status_mode,
+        "SPEC_CLAUDE_MODE": context.claude_mode,
+        "SPEC_CLAUDE_ARGV": context.claude_argv,
+        "SPEC_TERM_MARKER": context.term_marker,
+        "SPEC_TASK_ID": context.spec_task_id,
+    })
+    return env
+
+
+@given(u'the "claude.spectest" pool is spare')
+def step_impl(context):
+    _spec_setup(context)
+    context.status_mode = "spare"
+
+
+@given(u'the "claude.spectest" pool is not spare')
+def step_impl(context):
+    _spec_setup(context)
+    context.status_mode = "not_spare"
+
+
+@given(u'the leftover probe fails')
+def step_impl(context):
+    _spec_setup(context)
+    context.status_mode = "fail"
+
+
+@given(u'the pool is already locked by another agent')
+def step_impl(context):
+    # behave's own pid is alive, so this lock is valid rather than stale.
+    res = subprocess.run([
+        REAL_SPOTTICUS, "claim", SPEC_TARGET,
+        "--pid", str(os.getpid()),
+        "--product", "Spec", "--model", "Spec", "--name", "OtherAgent",
+    ], capture_output=True, text=True)
+    assert res.returncode == 0, f"Could not seed the lock: {res.stderr}"
+
+
+@given(u'the Claude CLI will exit with a failure')
+def step_impl(context):
+    context.claude_mode = "fail"
+
+
+@given(u'the Claude CLI will hang')
+def step_impl(context):
+    context.claude_mode = "hang"
+
+
+@given(u'the run cap is {seconds:d} second')
+def step_impl(context, seconds):
+    context.max_seconds = str(seconds)
+
+
+@given(u'the worker has claimed a Kanbus chore')
+def step_impl(context):
+    context.chore_title = f"Spot dispatch spec chore {time.time()}"
+    subprocess.run(
+        ["kbs", "create", context.chore_title, "--type", "task", "--label", "spot:claude.spectest"],
+        check=True, capture_output=True, text=True,
+    )
+    res = subprocess.run(
+        ["kbs", "list", "--label", "spot:claude.spectest", "--porcelain"],
+        capture_output=True, text=True,
+    )
+    rows = [ln for ln in res.stdout.splitlines() if context.chore_title in ln]
+    assert rows, f"Chore not found after creation: {res.stdout}"
+    context.spec_task_id = rows[0].split("|")[1].strip()
+    subprocess.run(
+        ["kbs", "update", context.spec_task_id, "--status", "in_progress"],
+        check=True, capture_output=True, text=True,
+    )
+
+
+@when(u'the Claude spot trigger runs')
+def step_impl(context):
+    context.trigger = subprocess.run(
+        ["bash", TRIGGER], env=_spec_env(context),
+        capture_output=True, text=True, timeout=120,
+    )
+
+
+@when(u'the Claude spot trigger runs and the pool is held')
+def step_impl(context):
+    proc = subprocess.Popen(
+        ["bash", TRIGGER], env=_spec_env(context),
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    )
+    # Wait for the worker to actually be running before preempting it.
+    deadline = time.time() + 30
+    while time.time() < deadline:
+        if os.path.exists(context.claude_argv) and os.path.exists(SPEC_LOCK_PATH):
+            break
+        time.sleep(0.2)
+    else:
+        proc.kill()
+        raise AssertionError("Trigger never claimed the pool and launched the worker")
+
+    subprocess.run([REAL_SPOTTICUS, "hold", SPEC_TARGET], capture_output=True, text=True)
+    out, err = proc.communicate(timeout=60)
+    context.trigger = subprocess.CompletedProcess(proc.args, proc.returncode, out, err)
+
+
+@then(u'the Claude CLI is not invoked')
+def step_impl(context):
+    assert not os.path.exists(context.claude_argv), (
+        f"Worker was launched when it should not have been: {context.trigger.stdout}"
+    )
+
+
+@then(u'the Claude CLI is invoked in non-interactive mode')
+def step_impl(context):
+    assert os.path.exists(context.claude_argv), (
+        f"Worker was never launched. stdout={context.trigger.stdout} stderr={context.trigger.stderr}"
+    )
+    with open(context.claude_argv) as f:
+        argv = f.read().splitlines()
+    assert "-p" in argv, f"Not run in non-interactive mode: {argv}"
+    assert "--dangerously-skip-permissions" in argv, f"Permissions not bypassed: {argv}"
+
+
+@then(u'the worker prompt contains the Claude spot worker skill')
+def step_impl(context):
+    with open(context.claude_argv) as f:
+        argv = f.read()
+    with open("skills/claude-spot-worker.md") as f:
+        skill = f.read()
+    marker = "## Workflow"
+    assert marker in skill, "The skill has no Workflow section to hand the worker"
+    assert marker in argv, "The worker prompt does not carry the skill body"
+
+
+@then(u'no lock remains for "claude.spectest"')
+def step_impl(context):
+    assert not os.path.exists(SPEC_LOCK_PATH), "The pool was left locked"
+
+
+@then(u'the lock for "claude.spectest" remains HELD')
+def step_impl(context):
+    assert os.path.exists(SPEC_LOCK_PATH), "The on-demand hold was cleared by the trigger"
+    # The point of a hold is that nothing dispatches onto the pool until it is released.
+    again = subprocess.run(
+        ["bash", TRIGGER], env=_spec_env(context),
+        capture_output=True, text=True, timeout=120,
+    )
+    assert again.returncode == 0, f"Second run errored: {again.stderr}"
+    assert "already claimed" in again.stdout, (
+        f"A held pool accepted a new spot run: {again.stdout}"
+    )
+
+
+@then(u'the trigger terminates the worker')
+def step_impl(context):
+    assert os.path.exists(context.term_marker), (
+        f"Worker was not terminated. stdout={context.trigger.stdout} stderr={context.trigger.stderr}"
+    )
+
+
+@then(u'the claimed Kanbus chore is reopened')
+def step_impl(context):
+    res = subprocess.run(["kbs", "show", context.spec_task_id], capture_output=True, text=True)
+    assert "Status: open" in res.stdout, f"Chore was not reopened: {res.stdout}"
+
+
+@then(u'the trigger declines to dispatch')
+def step_impl(context):
+    assert context.trigger.returncode == 0, (
+        f"Declining to dispatch is not an error. rc={context.trigger.returncode} "
+        f"stderr={context.trigger.stderr}"
+    )
+    assert context.trigger.stdout.strip(), "The trigger gave no reason for standing down"

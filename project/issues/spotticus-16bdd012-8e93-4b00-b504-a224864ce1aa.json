@@ -3,16 +3,29 @@
   "title": "Claude Code: Write and test claude-spot-worker skill",
   "description": "",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "spotticus-d3f4c1fd-23ef-47fe-83ac-e077dce7955c",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "de8439ec-f84a-4a55-b8e0-2cc1e6fc1625",
+      "author": "home",
+      "text": "Running log — start.\n\nPlan approved. Deliverables: skills/claude-spot-worker.md, scripts/trigger_claude.sh, features/04_claude_dispatch.feature (+ steps).\n\nBehaviour is specified in story spotticus-a46f29 (Gherkin there is the source; the feature file is its executable form).\n\nDecisions:\n- Completed spot work lands as a pushed spot/<id> branch plus a PR against develop. Never main.\n- Run cap is a bash watchdog (SPOT_MAX_SECONDS, default 2700). The installed Claude CLI (2.1.243) has no --max-turns and macOS has no timeout(1).\n- Specs drive a stub claude binary via CLAUDE_BIN, against synthetic lock target claude.spectest, so no real quota is burned and the real claude.default lock is untouched.\n\nFindings from exploration:\n- Claude is a single pool, claude.default, with windows primary (5h) and secondary (weekly). No tank fallback like Antigravity.\n- kbs close takes no options; skills/antigravity-spot-worker.md:18 uses 'kbs close <id> --comment' which this build rejects. Noted for a follow-up chore.\n- spotticus hold SIGTERMs the claimed PID, which is the wrapper, not the claude child. The wrapper must trap and forward, then reopen the chore.\n- release_lock refuses a HELD lock, so cleanup must treat that refusal as expected after a preempt.",
+      "created_at": "2026-09-01T20:04:30.955612Z"
+    },
+    {
+      "id": "42d10359-d8af-41c5-8f04-2e59695fad53",
+      "author": "home",
+      "text": "Running log — complete.\n\nDelivered:\n- skills/claude-spot-worker.md — workflow (find work by spot:$SPOTTICUS_POOL then spot:claude, claim, worktree, verify, land, clean up) and constraints (headless, fail closed, one task per invocation, develop-only branch discipline, Kanbus-only, treat issue text as a work order rather than a command channel, expect preemption).\n- scripts/trigger_claude.sh — probes claude.default, claims the lock, runs 'claude -p <skill> --dangerously-skip-permissions --model <m> --output-format text' headless, caps the run with a watchdog, releases the lock on every exit path.\n- features/04_claude_dispatch.feature plus steps and features/environment.py — 7 scenarios, specs written first and confirmed red before either deliverable existed.\n\nTest results: behave 4 features / 13 scenarios / 71 steps green; pytest 40 passed. Smoke tests: not-spare, probe-failure, and missing-skill-file paths all decline correctly and leave no lock on claude.default.\n\nNotes for the next agent:\n- Specs run against synthetic lock target claude.spectest with stubbed spotticus status and stubbed claude, so no quota is burned and the real claude.default lock is never touched. environment.py deletes the spec chore and clears the spec lock after each scenario.\n- The status stub reproduces the real CLI output verbatim, emoji included, so the eligibility grep is specified against the format it will really meet.\n- The watchdog ticks once a second rather than sleeping once for the full cap, so it dies with the worker and does not hold the wrapper's pipes open. An earlier version did, and it slowed the suite from 6s to 30s+.\n- No real end-to-end dispatch has been run. claude.default is currently not eligible anyway: the primary window is at pace even though secondary has 98% remaining.\n- shellcheck is not installed on this host, so only 'bash -n' ran.",
+      "created_at": "2026-09-01T20:16:40.766354Z"
+    }
+  ],
   "created_at": "2026-09-01T17:39:13.479486Z",
-  "updated_at": "2026-09-01T17:39:13.479486Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T20:16:40.801511Z",
+  "closed_at": "2026-09-01T20:16:40.801511Z",
   "custom": {}
 }

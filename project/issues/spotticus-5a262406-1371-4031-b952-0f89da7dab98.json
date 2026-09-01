@@ -3,16 +3,23 @@
   "title": "Cursor Composer: Write and test composer-spot-worker skill",
   "description": "",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "spotticus-d3f4c1fd-23ef-47fe-83ac-e077dce7955c",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "1694c85b-2523-45ec-a025-c0be6e2a9a22",
+      "author": "home",
+      "text": "Implementing composer-spot-worker skill and scripts/trigger_cursor.sh in worktree /tmp/spotticus-5a2624-composer-spot-worker on branch feat/composer-spot-worker.",
+      "created_at": "2026-09-01T19:48:03.019627Z"
+    }
+  ],
   "created_at": "2026-09-01T17:39:13.344071Z",
-  "updated_at": "2026-09-01T17:39:13.344071Z",
+  "updated_at": "2026-09-01T19:48:03.019627Z",
   "closed_at": null,
   "custom": {}
 }
