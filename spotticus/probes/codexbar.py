@@ -120,7 +120,7 @@ class CodexBarProbe(LeftoverProbe):
                 ["codexbar", "usage", "--format", "json"],
                 capture_output=True,
                 text=True,
-                timeout=10,
+                timeout=60,
                 check=True,
             )
             return parse_codexbar_json(process.stdout)
