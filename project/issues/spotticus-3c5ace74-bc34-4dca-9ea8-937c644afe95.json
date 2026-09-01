@@ -3,7 +3,7 @@
   "title": "Spot queue specs must clean up the Kanbus tasks they create",
   "description": "The `features/03_spot_queue.feature` steps create real Kanbus tasks on every\nrun and never remove them, so each `behave` run leaves spec scaffolding on the\nboard labeled `spot:cursor` and `spot:antigravity.gemini`.\n\nThis directly violates the invariant in story `5f632d` -- *open Kanbus chores\nlabeled spot are the only backlog*. A spot worker searching for work by label\npicks up fake chores.\n\n## Current litter\n\n| Label | Rows | Spec-generated |\n| --- | --- | --- |\n| `spot:cursor` | 19 | 15 (titles ending in a unix timestamp) |\n| `spot:antigravity.gemini` | 6 | 5 (titles ending in a unix timestamp) |\n\n## Definition of Done\n\n- The `a Kanbus task is labeled` and `the following tasks are labeled` steps\n  record every created id on the behave context.\n- `features/environment.py` `after_scenario` deletes those ids, the same way it\n  already deletes the `04_claude_dispatch` chore via `spec_task_id`.\n- Existing timestamped litter is deleted with `kbs delete <id> --yes`.\n  Untimestamped rows are left alone -- they are not provably spec output.\n- `.venv/bin/behave` stays green at 4 features / 13 scenarios, and\n  `.venv/bin/pytest` stays green.\n- `kbs list --label spot:cursor` and `--label spot:antigravity.gemini` return\n  only real work afterwards.\n\n## Cleanup lifecycle\n\n```mermaid\nsequenceDiagram\n    participant S as spot queue step\n    participant K as Kanbus\n    participant E as after_scenario\n    S->>K: kbs create \"Task A <ts>\" --label spot:cursor\n    S->>K: kbs list --label spot:cursor --porcelain\n    K-->>S: id\n    S->>S: context.spec_task_ids.append(id)\n    Note over S,E: scenario ends\n    E->>K: kbs delete <id> --yes\n```",
   "type": "chore",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 1,
   "assignee": "rap@endymion.com",
   "creator": null,
@@ -16,10 +16,16 @@
       "author": "home",
       "text": "## Implementation\n\n**Steps** (`features/steps/steps.py`): added `_create_spec_task(context, title, label, priority=None)`,\nwhich creates the task and records its Kanbus id on `context.spec_task_ids` in the\nsame call. Both spot queue steps -- `a Kanbus task is labeled` and\n`the following tasks are labeled` -- now go through it, so a create can no longer\nhappen without a matching record. The id comes from `kbs list --label <label>\n--porcelain` filtered on the unique timestamped title, the same lookup the\n`04_claude_dispatch` chore step already uses.\n\n**Teardown** (`features/environment.py`): `after_scenario` now iterates\n`_spec_task_ids(context)`, which merges the list from the spot queue steps with the\nsingle `spec_task_id` the dispatch specs still need to pass to the worker stub as\n`SPEC_TASK_ID`, de-duplicated. Both shapes are deleted with `kbs delete <id> --yes`.\n\n## Purge\n\nDeleted 20 leftover issues, every one matching\n`(Task A|Task B|Task C|Gemini Only Task) <unix timestamp>`:\n\n- `spot:cursor` (15): 0d32f2 25e955 28cd04 5ac504 625140 7e8e63 85e1bf ab18bf\n  b62bbd bad448 c5238c d1969b d23c67 d4da52 d72d8b\n- `spot:antigravity.gemini` (5): 1cc531 1f8e9c 2cf4c6 9d27aa ca7af3\n\nThe timestamp suffix was re-checked per row at delete time, not just when the list\nwas built.\n\n## Verification\n\n- `.venv/bin/behave` -- 4 features, 13 scenarios, 71 steps passed.\n- `.venv/bin/pytest` -- 40 passed.\n- Ran behave twice. Label counts were identical before and after each run, so the\n  specs now create and reclaim their own tasks.\n\n## Left alone\n\nFive untimestamped rows do not match the spec-output criterion and were not\ntouched: `4ef0d9` Task B (closed), `aec077` Task C (closed), `e7113e` Task A\n(closed), `36756c` Gemini Only Task (closed), `5c847e` Test task for search (open).\nThey look like pre-timestamp spec residue but cannot be proven to be, so they are\nleft for a human call.",
       "created_at": "2026-09-01T20:27:51.229574Z"
+    },
+    {
+      "id": "d7377320-0192-4949-9314-a40a7c290d4a",
+      "author": "home",
+      "text": "Landed in 5a448d0 on claude/jovial-volhard-e3df08, branched from develop at a870eec. Spot queue steps record their created ids and after_scenario deletes them; 20 timestamped leftovers purged. behave 4 features / 13 scenarios green, pytest 40 passed, label queries return only real work.",
+      "created_at": "2026-09-01T20:28:16.425990Z"
     }
   ],
   "created_at": "2026-09-01T20:24:29.837584Z",
-  "updated_at": "2026-09-01T20:27:51.229574Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T20:28:16.438397Z",
+  "closed_at": "2026-09-01T20:28:16.438397Z",
   "custom": {}
 }
