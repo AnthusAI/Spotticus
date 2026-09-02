@@ -148,11 +148,35 @@ def step_impl(context):
 
 # --- Spot Queue ---
 
+def _create_spec_task(context, title, label, priority=None):
+    """Create a spec task and record its id for after_scenario to delete.
+
+    These tasks carry the same labels a real spot worker searches on, so one
+    left behind is indistinguishable from genuine backlog. Recording happens
+    here, next to the create, so the two cannot drift apart.
+    """
+    cmd = ["kbs", "create", title, "--label", label, "--type", "task"]
+    if priority is not None:
+        cmd += ["--priority", priority]
+    subprocess.run(cmd, check=True, capture_output=True, text=True)
+
+    res = subprocess.run(
+        ["kbs", "list", "--label", label, "--porcelain"],
+        capture_output=True, text=True,
+    )
+    rows = [ln for ln in res.stdout.splitlines() if title in ln]
+    assert rows, f"Task not found after creation: {title}"
+
+    if not hasattr(context, "spec_task_ids"):
+        context.spec_task_ids = []
+    context.spec_task_ids.append(rows[0].split("|")[1].strip())
+
+
 @given(u'a Kanbus task is labeled "spot:antigravity.gemini"')
 def step_impl(context):
     import time
     context.gemini_task_title = f"Gemini Only Task {time.time()}"
-    subprocess.run(["kbs", "create", context.gemini_task_title, "--label", "spot:antigravity.gemini", "--type", "task"], check=True)
+    _create_spec_task(context, context.gemini_task_title, "spot:antigravity.gemini")
 
 @when(u'the Antigravity spot worker searches for "spot:antigravity.gemini" tasks')
 def step_impl(context):
@@ -179,7 +203,7 @@ def step_impl(context):
     for row in context.table:
         title = f"Task {row['Task']} {time.time()}"
         context.task_titles[row['Task']] = title
-        subprocess.run(["kbs", "create", title, "--label", "spot:cursor", "--type", "task", "--priority", row['Priority']], check=True)
+        _create_spec_task(context, title, "spot:cursor", priority=row['Priority'])
         time.sleep(1)
 
 @when(u'the agent sorts by priority')

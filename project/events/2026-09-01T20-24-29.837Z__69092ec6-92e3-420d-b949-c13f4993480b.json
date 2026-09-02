@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "69092ec6-92e3-420d-b949-c13f4993480b",
+  "issue_id": "spotticus-3c5ace74-bc34-4dca-9ea8-937c644afe95",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T20:24:29.837Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "The `features/03_spot_queue.feature` steps create real Kanbus tasks on every\nrun and never remove them, so each `behave` run leaves spec scaffolding on the\nboard labeled `spot:cursor` and `spot:antigravity.gemini`.\n\nThis directly violates the invariant in story `5f632d` -- *open Kanbus chores\nlabeled spot are the only backlog*. A spot worker searching for work by label\npicks up fake chores.\n\n## Current litter\n\n| Label | Rows | Spec-generated |\n| --- | --- | --- |\n| `spot:cursor` | 19 | 15 (titles ending in a unix timestamp) |\n| `spot:antigravity.gemini` | 6 | 5 (titles ending in a unix timestamp) |\n\n## Definition of Done\n\n- The `a Kanbus task is labeled` and `the following tasks are labeled` steps\n  record every created id on the behave context.\n- `features/environment.py` `after_scenario` deletes those ids, the same way it\n  already deletes the `04_claude_dispatch` chore via `spec_task_id`.\n- Existing timestamped litter is deleted with `kbs delete <id> --yes`.\n  Untimestamped rows are left alone -- they are not provably spec output.\n- `.venv/bin/behave` stays green at 4 features / 13 scenarios, and\n  `.venv/bin/pytest` stays green.\n- `kbs list --label spot:cursor` and `--label spot:antigravity.gemini` return\n  only real work afterwards.\n\n## Cleanup lifecycle\n\n```mermaid\nsequenceDiagram\n    participant S as spot queue step\n    participant K as Kanbus\n    participant E as after_scenario\n    S->>K: kbs create \"Task A <ts>\" --label spot:cursor\n    S->>K: kbs list --label spot:cursor --porcelain\n    K-->>S: id\n    S->>S: context.spec_task_ids.append(id)\n    Note over S,E: scenario ends\n    E->>K: kbs delete <id> --yes\n```",
+    "issue_type": "chore",
+    "labels": [],
+    "parent": "spotticus-d6b643b9-7bd9-475c-a3c1-6e37f713a98c",
+    "priority": 1,
+    "status": "open",
+    "title": "Spot queue specs must clean up the Kanbus tasks they create"
+  }
+}
