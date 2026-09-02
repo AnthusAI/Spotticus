@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "a6ad1bf0-ddff-4ca1-a98b-8f074c45c755",
+  "issue_id": "spotticus-14f95878-39f8-428d-b582-486db0991001",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T20:25:30.149Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Cheap dispatch smoke test. Do exactly this and nothing more:\n\n1. Run `bash -n` against every script in `scripts/`.\n2. Leave a Kanbus comment on this task listing each script and whether it passed.\n3. Close the task.\n\nChange no files. Do not create a worktree, a branch, or a PR.",
+    "issue_type": "sub-task",
+    "labels": [
+      "spot:claude"
+    ],
+    "parent": "spotticus-8997294b-b945-4f7a-8906-2c69d7f08b20",
+    "priority": 3,
+    "status": "open",
+    "title": "Spot smoke: confirm the triggers are syntactically valid"
+  }
+}

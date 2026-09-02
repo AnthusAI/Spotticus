@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "d49007da-2b35-4cad-8768-6a1384889c8a",
+  "issue_id": "spotticus-75fa3b39-6c08-4243-a8b8-3357adc756a0",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T20:25:30.127Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Cheap dispatch smoke test. Do exactly this and nothing more:\n\n1. Run `.venv/bin/spotticus status`.\n2. Leave a Kanbus comment on this task with the eligibility line for each pool (one line each, no analysis).\n3. Close the task.\n\nChange no files. Do not create a worktree, a branch, or a PR. This chore exists to prove the dispatch loop works, not to produce work.",
+    "issue_type": "sub-task",
+    "labels": [
+      "spot:claude"
+    ],
+    "parent": "spotticus-8997294b-b945-4f7a-8906-2c69d7f08b20",
+    "priority": 1,
+    "status": "open",
+    "title": "Spot smoke: report pool status"
+  }
+}

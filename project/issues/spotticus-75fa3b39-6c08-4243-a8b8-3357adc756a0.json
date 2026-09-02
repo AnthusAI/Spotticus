@@ -1,0 +1,27 @@
+{
+  "id": "spotticus-75fa3b39-6c08-4243-a8b8-3357adc756a0",
+  "title": "Spot smoke: report pool status",
+  "description": "Cheap dispatch smoke test. Do exactly this and nothing more:\n\n1. Run `.venv/bin/spotticus status`.\n2. Leave a Kanbus comment on this task with the eligibility line for each pool (one line each, no analysis).\n3. Close the task.\n\nChange no files. Do not create a worktree, a branch, or a PR. This chore exists to prove the dispatch loop works, not to produce work.",
+  "type": "sub-task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-8997294b-b945-4f7a-8906-2c69d7f08b20",
+  "labels": [
+    "spot:claude"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "a3d4a6da-4cd8-4785-9d10-e86820547c4e",
+      "author": "home",
+      "text": "CODEX/default: 🔴 SKIP: Not all windows spare\nCLAUDE/default: 🔴 SKIP: Locked by Claude Code (claude-haiku-4-5) name: ClaudeSpotSmoke\nCURSOR/premium: 🔴 SKIP: Not all windows spare\nCURSOR/cursor-models: 🟢 ELIGIBLE\nCURSOR/grok: 🔴 SKIP: Not all windows spare\nANTIGRAVITY/gemini: 🔴 SKIP: Not all windows spare\nANTIGRAVITY/claude: 🔴 SKIP: Not all windows spare",
+      "created_at": "2026-09-01T20:31:42.368191Z"
+    }
+  ],
+  "created_at": "2026-09-01T20:25:30.126867Z",
+  "updated_at": "2026-09-01T20:31:44.173050Z",
+  "closed_at": "2026-09-01T20:31:44.173050Z",
+  "custom": {}
+}

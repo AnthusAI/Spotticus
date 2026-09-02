@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-8997294b-b945-4f7a-8906-2c69d7f08b20",
+  "title": "Cheap dummy spot routines for dispatch testing",
+  "description": "A handful of Kanbus chores that exercise the full spot loop (find work, claim, execute, verify, close) at near-zero cost, so the dispatch machinery can be tested repeatedly without burning quota or CPU.\n\nEach dummy routine must be: one or two shell commands, no repo mutation, verifiable from the Kanbus comment it leaves. Labeled spot:claude so only the Claude worker picks them up.",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-f0568578-2a4b-4103-a13e-6d1aa39834b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T20:24:50.491341Z",
+  "updated_at": "2026-09-01T20:24:50.491341Z",
+  "closed_at": null,
+  "custom": {}
+}

@@ -1,0 +1,18 @@
+{
+  "id": "spotticus-f0568578-2a4b-4103-a13e-6d1aa39834b0",
+  "title": "Cheap dummy spot routines and an SDK-style dispatch path",
+  "description": "Two follow-ons to the Claude spot worker (spotticus-16bdd0):\n\n1. A set of deliberately cheap dummy spot chores that exercise the whole dispatch loop end to end without burning meaningful CPU or tokens, so the machinery can be tested repeatedly.\n2. A second dispatch path where Spotticus drives Claude Code in-process via the Claude Agent SDK instead of shelling out to the CLI.\n\nThe SDK path is worth having because it gives Spotticus things the CLI wrapper cannot get: a real turn limit (max_turns), a message stream it can watch and stop mid-run, and in-process control of the lock rather than a trap-and-signal dance.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T20:24:29.471768Z",
+  "updated_at": "2026-09-01T20:24:29.471768Z",
+  "closed_at": null,
+  "custom": {}
+}

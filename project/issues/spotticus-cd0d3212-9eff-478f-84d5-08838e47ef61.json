@@ -1,0 +1,20 @@
+{
+  "id": "spotticus-cd0d3212-9eff-478f-84d5-08838e47ef61",
+  "title": "Spot smoke: count the spec suite",
+  "description": "Cheap dispatch smoke test. Do exactly this and nothing more:\n\n1. Count the Scenario lines across `features/*.feature` with a single grep.\n2. Leave a Kanbus comment on this task giving the total and the per-file breakdown.\n3. Close the task.\n\nChange no files. Do not create a worktree, a branch, or a PR.",
+  "type": "sub-task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-8997294b-b945-4f7a-8906-2c69d7f08b20",
+  "labels": [
+    "spot:claude"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-01T20:25:30.137866Z",
+  "updated_at": "2026-09-01T20:25:30.137866Z",
+  "closed_at": null,
+  "custom": {}
+}

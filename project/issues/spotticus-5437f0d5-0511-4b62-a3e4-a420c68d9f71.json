@@ -1,0 +1,26 @@
+{
+  "id": "spotticus-5437f0d5-0511-4b62-a3e4-a420c68d9f71",
+  "title": "SDK-style dispatch: Spotticus drives Claude Code in-process",
+  "description": "Second dispatch path alongside scripts/trigger_claude.sh: instead of shelling out to the CLI and trapping signals, Spotticus uses the Claude Agent SDK (claude-agent-sdk, query() + ClaudeAgentOptions) to run the worker in-process.\n\nWhat the SDK buys us that the CLI wrapper cannot have:\n- max_turns, a real turn ceiling. The CLI has no such flag, which is why the shell wrapper needs a wall-clock watchdog.\n- A live message stream, so Spotticus can log what the worker is doing and stop it mid-run.\n- In-process lock handling: claim/release via spotticus.locks directly, no PID trap dance.",
+  "type": "task",
+  "status": "in_progress",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-f0568578-2a4b-4103-a13e-6d1aa39834b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "d8eb9fbc-2a2d-4138-aaf8-747879c54c11",
+      "author": "home",
+      "text": "SDK in-process dispatch landed on develop: scripts/trigger_claude_sdk.py + features/05_sdk_dispatch.feature (6 scenarios green). Three fixes were needed to make the spec pass: (1) the stub codexbar payload used a rateLimits array but the parser's claude branch reads usage.primary/secondary dicts; (2) read_lock was leaving an empty lockfile behind (fixed in spotticus/locks.py); (3) hold_lock SIGTERMs the trigger pid, so trigger_claude_sdk.py now catches SIGTERM and stops between messages instead of dying mid-stream. Still TODO: wire 05_sdk_dispatch into CI (it needs .venv/bin/spotticus, which CI doesn't have) and decide on the claude-sibling-wip-steps stash.",
+      "created_at": "2026-09-02T00:14:58.219940Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-01T20:24:50.501608Z",
+  "updated_at": "2026-09-02T00:14:58.219940Z",
+  "closed_at": null,
+  "custom": {}
+}
