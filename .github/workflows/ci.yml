@@ -23,3 +23,5 @@ jobs:
         run: pytest
       - name: Composer wrapper specs
         run: PYTHONPATH=. behave features/04_composer_spot_worker.feature
+      - name: Claude dispatch specs
+        run: PYTHONPATH=. behave features/04_claude_dispatch.feature
