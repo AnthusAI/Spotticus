@@ -3,7 +3,7 @@
   "title": "Spot smoke: count the spec suite",
   "description": "Cheap dispatch smoke test. Do exactly this and nothing more:\n\n1. Count the Scenario lines across `features/*.feature` with a single grep.\n2. Leave a Kanbus comment on this task giving the total and the per-file breakdown.\n3. Close the task.\n\nChange no files. Do not create a worktree, a branch, or a PR.",
   "type": "sub-task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -12,9 +12,17 @@
     "spot:claude"
   ],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "3c244bb3-ff47-4f14-9c0f-8d5363c0471d",
+      "author": "home",
+      "text": "Smoke test: spec suite count\n\nTotal Scenarios: 22\n\nPer-file breakdown:\n- features/01_scoring.feature: 2\n- features/02_filtering.feature: 2\n- features/03_spot_queue.feature: 2\n- features/04_claude_dispatch.feature: 7\n- features/04_composer_spot_worker.feature: 3\n- features/05_sdk_dispatch.feature: 6",
+      "created_at": "2026-09-02T10:41:55.565885Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-01T20:25:30.137866Z",
-  "updated_at": "2026-09-01T20:25:30.137866Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T10:41:55.948014Z",
+  "closed_at": "2026-09-02T10:41:55.948014Z",
   "custom": {}
 }

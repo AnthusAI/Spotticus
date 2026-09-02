@@ -10,9 +10,17 @@
   "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "4edef249-0d5e-466c-b730-ca0006a7dfaf",
+      "author": "home",
+      "text": "Running log — both dispatch paths proven live.\n\nDummy routines (spotticus-899729): three cheap sub-tasks filed under spot:claude (75fa3b, cd0d32, 14f958), each a one-command read-only check that reports back via Kanbus comment and closes itself. No worktree, no branch, no repo mutation - designed to exercise the full loop (find work, claim, execute, verify, close) at near-zero token cost.\n\nCLI path (scripts/trigger_claude.sh) - live dispatch on 75fa3b 'report pool status', haiku-4-5, real threshold override, 300s cap:\n- First attempt failed: the skill's YAML frontmatter ('---') was passed as a CLI argument and got parsed as an unknown option. Fixed by piping the prompt on stdin instead of argv.\n- Second attempt ran clean but the worker asked whether to begin instead of acting - handed the skill body before any instruction to act, it read as documentation. Fixed by leading the prompt with an explicit 'begin immediately, do not wait for confirmation' instruction and stripping the YAML frontmatter before it ever reaches the worker.\n- Third attempt: claimed 75fa3b, ran `spotticus status`, commented the per-pool eligibility, closed the task, released the lock. Confirmed end to end.\n- features/04_claude_dispatch.feature grew a stub-CLI hardening (rejects unrecognised args, mirroring the real CLI) and two new scenarios (prompt leads with an instruction to begin; frontmatter stripped) so this class of bug fails the spec next time instead of only showing up live.\n\nSDK path (scripts/trigger_claude_sdk.py, spotticus-5437f0) - runs the worker in-process via claude-agent-sdk instead of shelling out: real max_turns ceiling (the CLI has none), a message stream logged as it happens, in-process lock handling via spotticus.locks directly. Reused the same prompt-framing fix. Live dispatch on cd0d32 'count the spec suite', haiku-4-5, 15-turn cap: claimed the pool, ran the grep, commented the per-file scenario breakdown, closed the task, released the lock. Confirmed end to end.\n- features/05_sdk_dispatch.feature (6 scenarios) drives the real spotticus probe/scoring/lock code against a stubbed codexbar and a stubbed claude_agent_sdk module on PYTHONPATH, with HOME redirected to a scratch dir so the real claude.default lock is never touched. No tokens spent in the spec suite; only the two live smoke dispatches above spent real quota (haiku, small chores, capped turns).\n- An on-demand hold SIGTERMs the pid in the lock, which for this path is the SDK trigger's own process - added a SIGTERM handler so the run loop notices via a preempted() poll and stops between messages instead of the default kill, then reopens the chore and reports the lock as HELD rather than releasing it out from under the hold.\n\nFail-closed smoke-tested both triggers against the real (non-stubbed) claude.default pool while it was genuinely at pace: both declined correctly and left no lock behind.\n\nFull suite: 6 features / 22 scenarios / 119 steps green under behave, 44 passed under pytest.",
+      "created_at": "2026-09-02T10:43:44.553048Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-01T20:24:29.471768Z",
-  "updated_at": "2026-09-01T20:24:29.471768Z",
+  "updated_at": "2026-09-02T10:43:44.553048Z",
   "closed_at": null,
   "custom": {}
 }

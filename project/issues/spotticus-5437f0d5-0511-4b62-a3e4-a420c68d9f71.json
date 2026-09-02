@@ -3,7 +3,7 @@
   "title": "SDK-style dispatch: Spotticus drives Claude Code in-process",
   "description": "Second dispatch path alongside scripts/trigger_claude.sh: instead of shelling out to the CLI and trapping signals, Spotticus uses the Claude Agent SDK (claude-agent-sdk, query() + ClaudeAgentOptions) to run the worker in-process.\n\nWhat the SDK buys us that the CLI wrapper cannot have:\n- max_turns, a real turn ceiling. The CLI has no such flag, which is why the shell wrapper needs a wall-clock watchdog.\n- A live message stream, so Spotticus can log what the worker is doing and stop it mid-run.\n- In-process lock handling: claim/release via spotticus.locks directly, no PID trap dance.",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -20,7 +20,7 @@
     }
   ],
   "created_at": "2026-09-01T20:24:50.501608Z",
-  "updated_at": "2026-09-02T00:14:58.219940Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T10:43:44.576393Z",
+  "closed_at": "2026-09-02T10:43:44.576393Z",
   "custom": {}
 }
