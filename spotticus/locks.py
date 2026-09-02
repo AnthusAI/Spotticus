@@ -107,7 +107,15 @@ def acquire_provider_lock(target: str):
 
 
 def read_lock(target: str) -> Optional[LockData]:
-    """Read the current valid lock for a provider. Stale locks are ignored (treated as None)."""
+    """Read the current valid lock for a provider. Stale locks are ignored (treated as None).
+
+    Reading a lock must not create one. acquire_provider_lock opens with "a+", which would
+    leave an empty lockfile behind for every pool a probe merely inspects - and an empty
+    file is enough to trip a "no lock remains" assertion (and to litter ~/.spotticus/locks).
+    """
+    path = get_lock_path(target)
+    if not path.exists():
+        return None
     with acquire_provider_lock(target) as f:
         return _load_lock_data(f)
 
