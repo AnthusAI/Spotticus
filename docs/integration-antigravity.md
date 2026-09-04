@@ -10,18 +10,16 @@ Your first instinct might be to schedule Spotticus using an OS-level `cron` job 
 
 OS-level background schedulers run in a sterile environment. They do not inherit your user session's authentication state, nor can they cleanly access the macOS Keychain where Antigravity stores its authentication tokens. If you use `cron` or `launchd` to invoke the Antigravity CLI (`agy`), it will instantly crash with an `authentication required` error.
 
-**Rule:** The Spotticus polling daemon must be executed from within a fully authenticated environment.
+**Rule:** The Spotticus polling daemon must be executed from within a fully authenticated environment (i.e., an interactive terminal session).
 
 ---
 
-## The Solution: Antigravity Sidecars
+## The Solution: A Background Terminal Daemon
 
-The officially supported and most robust way to run Spotticus is as an **Antigravity Sidecar**.
-
-Sidecars are long-running background processes managed directly by the Antigravity desktop application. Because they are launched by Antigravity itself, they naturally inherit the exact same environment and authentication state as your interactive CLI and agents.
+The simplest and most robust way to run Spotticus without authentication errors is to run a polling loop as a background process in your standard terminal.
 
 ### 1. Create the Polling Daemon Script
-Create a bash script (e.g., `~/run_spotticus_daemon.sh`) that acts as the bridge between Spotticus and the Antigravity CLI (`agy`):
+Create a bash script (e.g., `~/run_spotticus_daemon.sh`) that acts as an infinite loop bridging Spotticus and the Antigravity CLI (`agy`):
 
 ```bash
 #!/bin/bash
@@ -54,7 +52,11 @@ done
 ```
 Make the script executable: `chmod +x ~/run_spotticus_daemon.sh`
 
-### 2. Configure the Sidecar
-Configure Antigravity to run this script as a Sidecar (refer to the Antigravity Sidecar documentation for the exact JSON schema). 
+### 2. Run it in the Background
+Open your standard macOS terminal (which inherently has access to your Keychain and authentication) and run the script in the background using `nohup`:
 
-Once configured, whenever Antigravity is running on your machine, Spotticus will poll your quota and dispatch Kanbus chores flawlessly in the background without any authentication errors or token burn!
+```bash
+nohup ~/run_spotticus_daemon.sh > /tmp/spotticus.log 2>&1 &
+```
+
+That's it! The script is now detached from your terminal and will silently poll your quota every 5 minutes. Because it was launched from your authenticated session, it will perfectly lease Antigravity agents without any authentication errors or token burn!
