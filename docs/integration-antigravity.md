@@ -19,7 +19,7 @@ In a Push model, you use the agent platform's native scheduling UI (e.g., Antigr
 In a Pull model, you decouple the capacity checking from the LLM execution. You use standard programmatic tools (like an OS `cron` job, a `systemd` timer, or an Antigravity Sidecar) to check for capacity, and only wake the LLM when there is actual work to do.
 * **How it works:** 
   1. A local `cron` job runs a lightweight shell script every 10-15 minutes.
-  2. The script runs `spotticus status` to perform the math locally (zero token cost).
+  2. The script runs `spotticus status`. This CLI command evaluates Spotticus's nuanced heuristics locally (zero token cost)—calculating linear pace, checking absolute floors, and respecting holds, as detailed in [docs/dispatch.md](./dispatch.md).
   3. If capacity exists, it checks the Kanbus backlog for `spot` tasks (zero token cost).
   4. If both exist, it uses the platform's SDK (e.g., the Antigravity Python SDK) to programmatically spawn a sub-agent to do the work.
 * **Pros:** Strictly preserves AI tokens for actual coding work.
