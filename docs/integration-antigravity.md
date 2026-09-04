@@ -1,96 +1,60 @@
 # Scheduling and Dispatch Integrations
 
-Spotticus is responsible for monitoring your spare coding-agent quota and dispatching chores when capacity is available. However, Spotticus itself needs to be scheduled to run periodically to check this capacity.
+Spotticus monitors your spare coding-agent quota and dispatches Kanbus chores when capacity is available. However, Spotticus needs a scheduler to run periodically.
 
-This document covers the tradeoffs of different scheduling architectures and provides specific instructions for integrating with popular tools like **Google Antigravity**.
+This document covers how to schedule Spotticus specifically for **Google Antigravity**.
 
-## The Architecture Tradeoff: Push vs. Pull
+## The Authentication Pitfall (Why Cron Fails)
 
-When integrating Spotticus with an agentic platform, you have two architectural choices:
+Your first instinct might be to schedule Spotticus using an OS-level `cron` job or a macOS `launchd` agent. **Do not do this.** 
 
-### 1. The Push Model (Prompt-Based Scheduling)
-In a Push model, you use the agent platform's native scheduling UI (e.g., Antigravity's `/schedule` or "Scheduled Tasks" sidebar). 
-* **How it works:** The platform wakes up an LLM agent every `N` minutes with a text prompt like: *"Run Spotticus. If there's spare capacity, pick a Kanbus issue and write the code."*
-* **Pros:** Extremely easy to set up using the platform's UI.
-* **Cons (Critical):** **Token Burn.** This method wastes quota. The LLM must be invoked and fed context tokens every single time the schedule fires, just to realize that there is no spare capacity available. 
-* **Verdict:** Avoid this model for high-frequency polling.
+OS-level background schedulers run in a sterile environment. They do not inherit your user session's authentication state, nor can they cleanly access the macOS Keychain where Antigravity stores its authentication tokens. If you use `cron` or `launchd` to invoke the Antigravity CLI (`agy`), it will instantly crash with an `authentication required` error.
 
-### 2. The Pull Model (Programmatic Cron) **(Recommended)**
-In a Pull model, you decouple the capacity checking from the LLM execution. You use standard programmatic tools (like an OS `cron` job, a `systemd` timer, or an Antigravity Sidecar) to check for capacity, and only wake the LLM when there is actual work to do.
-* **How it works:** 
-  1. A local background job runs a lightweight shell script every 10-15 minutes.
-  2. The script runs `spotticus status`. This CLI command evaluates Spotticus's nuanced heuristics locally (zero token cost)—calculating linear pace, checking absolute floors, and respecting holds, as detailed in [docs/dispatch.md](./dispatch.md).
-  3. If capacity exists, it checks the Kanbus backlog for `spot` tasks (zero token cost).
-  4. If both exist, it uses the platform's SDK (e.g., the Antigravity Python SDK or headless CLI) to programmatically spawn a sub-agent to do the work.
-* **Pros:** Strictly preserves AI tokens for actual coding work.
-* **Cons:** Requires a bit more initial setup in the terminal.
+**Rule:** The Spotticus polling daemon must be executed from within a fully authenticated environment.
 
 ---
 
-## Integration: Google Antigravity
+## The Solution: Antigravity Sidecars
 
-To set up the optimal **Pull Model** with Google Antigravity, follow these steps:
+The officially supported and most robust way to run Spotticus is as an **Antigravity Sidecar**.
 
-### 1. Create the Dispatch Script
-Create a bash script (e.g., `~/run_spotticus.sh`) that acts as the bridge between Spotticus and the Antigravity CLI (`agy`):
+Sidecars are long-running background processes managed directly by the Antigravity desktop application. Because they are launched by Antigravity itself, they naturally inherit the exact same environment and authentication state as your interactive CLI and agents.
+
+### 1. Create the Polling Daemon Script
+Create a bash script (e.g., `~/run_spotticus_daemon.sh`) that acts as the bridge between Spotticus and the Antigravity CLI (`agy`):
 
 ```bash
 #!/bin/bash
 # Include cargo and local bin for kbs and agy, and Spotticus bin for probes
 export PATH="~/Projects/Spotticus/bin:~/.cargo/bin:~/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
-LOCKFILE="/tmp/spotticus.lock"
-if [ -f "$LOCKFILE" ]; then
-    exit 0
-fi
+echo "Starting Spotticus background daemon..."
 
-touch "$LOCKFILE"
-trap 'rm -f "$LOCKFILE"' EXIT
+while true; do
+    cd ~/Projects/Spotticus
+    SPARE_CAPACITY=$(.venv/bin/spotticus status --threshold=0.10)
 
-cd ~/Projects/Spotticus
-SPARE_CAPACITY=$(.venv/bin/spotticus status --threshold=0.10)
-
-if echo "$SPARE_CAPACITY" | grep -q "🟢 ELIGIBLE"; then
-    cd ~/Projects/YourProject
-    OPEN_TASKS=$(kbs list --status open --label spot --porcelain)
-    
-    if [ -n "$OPEN_TASKS" ]; then
-        FIRST_TASK_ID=$(echo "$OPEN_TASKS" | head -n 1 | awk -F'|' '{print $2}' | xargs)
-        kbs update "$FIRST_TASK_ID" --status in_progress
+    if echo "$SPARE_CAPACITY" | grep -q "🟢 ELIGIBLE"; then
+        cd ~/Projects/YourProject
+        OPEN_TASKS=$(kbs list --status open --label spot --porcelain)
         
-        # Spawn the agent and block until it finishes. 
-        # Note the 15m timeout to give it time to work!
-        agy --dangerously-skip-permissions --print-timeout 15m --print "You are Spotticus executing a spot task. You must implement the requirements for Kanbus issue $FIRST_TASK_ID..."
+        if [ -n "$OPEN_TASKS" ]; then
+            FIRST_TASK_ID=$(echo "$OPEN_TASKS" | head -n 1 | awk -F'|' '{print $2}' | xargs)
+            kbs update "$FIRST_TASK_ID" --status in_progress
+            
+            # Spawn the agent and block until it finishes. 
+            # Note the 15m timeout to give it time to work!
+            agy --dangerously-skip-permissions --print-timeout 15m --print "You are Spotticus executing a spot task. You must implement the requirements for Kanbus issue $FIRST_TASK_ID..."
+        fi
     fi
-fi
+    
+    # Sleep for 5 minutes before polling again
+    sleep 300
+done
 ```
-Make the script executable: `chmod +x ~/run_spotticus.sh`
+Make the script executable: `chmod +x ~/run_spotticus_daemon.sh`
 
-### 2. Schedule the Script
-**⚠️ macOS Warning: Do not use crontab!**
-On macOS, `cron` runs in a restricted, headless environment and does not have access to the user's Keychain. Because Antigravity requires Keychain access to read authentication tokens, `agy` will instantly crash with an authentication error if run from `cron`.
+### 2. Configure the Sidecar
+Configure Antigravity to run this script as a Sidecar (refer to the Antigravity Sidecar documentation for the exact JSON schema). 
 
-Instead, use **launchd**, which runs inside the user's GUI session:
-
-1. Create a plist file at `~/Library/LaunchAgents/com.spotticus.agent.plist`:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.spotticus.agent</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/bin/bash</string>
-        <string>/Users/home/run_spotticus.sh</string>
-    </array>
-    <key>StartInterval</key>
-    <integer>300</integer> <!-- 5 minutes -->
-</dict>
-</plist>
-```
-2. Load the agent: `launchctl load ~/Library/LaunchAgents/com.spotticus.agent.plist`
-
-### 3. Alternative: Antigravity Sidecars
-If you prefer to manage the lifecycle of the daemon entirely within Antigravity without touching OS files, you can configure the bash script as an **Antigravity Sidecar**. Sidecars are long-running background processes that run alongside the agent UI, allowing you to use the exact same programmatic logic without burning prompt tokens or dealing with Keychain constraints.
+Once configured, whenever Antigravity is running on your machine, Spotticus will poll your quota and dispatch Kanbus chores flawlessly in the background without any authentication errors or token burn!
