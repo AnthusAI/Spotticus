@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "d458cff2-7445-4792-a0ed-ddd304313968",
+  "issue_id": "spotticus-b0493e97-f954-4af4-9076-a49d27e02397",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-04T16:26:08.856Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Publish the working Spotticus repository as the public GitHub project AnthusAI/Spotticus. Preserve the existing develop branch and current Antigravity/Cursor fixture change. Definition of Done: target repository exists publicly, current history is pushed, origin is configured, and the resulting repository URL is recorded.",
+    "issue_type": "chore",
+    "labels": [
+      "release"
+    ],
+    "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+    "priority": 2,
+    "status": "open",
+    "title": "Publish Spotticus as AnthusAI/Spotticus"
+  }
+}

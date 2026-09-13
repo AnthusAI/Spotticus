@@ -21,7 +21,9 @@ def _matches_target(provider: str, pool_id: str, targets: list[str]) -> bool:
     return False
 
 import dataclasses
+from spotticus.routing import resolve_target
 import dataclasses
+from spotticus.routing import resolve_target
 def _prune_report(report, targets: list[str]):
     if not targets:
         return report
@@ -186,6 +188,24 @@ def _cmd_unhold(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_resolve(args: argparse.Namespace) -> int:
+    try:
+        from pathlib import Path
+        config_path = Path(args.config) if args.config else Path.home() / ".spotticus.yml"
+        result = resolve_target(
+            class_name=args.cls,
+            specific_app=args.app,
+            config_path=config_path,
+            threshold=args.threshold,
+            floor=args.floor,
+        )
+        print(json.dumps(result, indent=2))
+        return 0
+    except Exception as e:
+        print(f"Error resolving target: {e}", file=sys.stderr)
+        return 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
@@ -245,6 +265,14 @@ def main(argv: list[str] | None = None) -> int:
     hold_parser = subparsers.add_parser("hold", help="Preempt and hold a target lock.")
     hold_parser.add_argument("target", help="Target to hold (e.g., provider.pool).")
 
+    # -- resolve --
+    resolve_parser = subparsers.add_parser("resolve", help="Resolve a model class to an app/model.")
+    resolve_parser.add_argument("--cls", required=True, help="The model class (e.g. smart, cheap).")
+    resolve_parser.add_argument("--app", help="Optional specific app to override the class priority.")
+    resolve_parser.add_argument("--config", help="Path to config yaml.")
+    resolve_parser.add_argument("--threshold", type=float, default=0.20, help="Spare threshold.")
+    resolve_parser.add_argument("--floor", type=float, default=15.0, help="Remaining-percent floor.")
+
     # -- unhold --
     unhold_parser = subparsers.add_parser("unhold", help="Unconditionally remove a target's lock (even if HELD).")
     unhold_parser.add_argument("target", help="Target to unhold (e.g., provider.pool).")
@@ -259,6 +287,9 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_release(args)
     elif args.command == "hold":
         return _cmd_hold(args)
+    elif args.command == "resolve":
+        return _cmd_resolve(args)
+
     elif args.command == "unhold":
         return _cmd_unhold(args)
     else:

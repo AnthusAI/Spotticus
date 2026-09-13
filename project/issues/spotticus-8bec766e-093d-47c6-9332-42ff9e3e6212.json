@@ -1,0 +1,28 @@
+{
+  "id": "spotticus-8bec766e-093d-47c6-9332-42ff9e3e6212",
+  "title": "Describe public Spotticus repository",
+  "description": "Set a concise public GitHub description for AnthusAI/Spotticus based on the repository documentation.",
+  "type": "chore",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "labels": [
+    "release"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "259c0ab1-61db-46e9-be70-c69821267821",
+      "author": "home",
+      "text": "Set the public GitHub description to: Use leftover included coding-agent quota for interruptible chores, with usage probes and preemptible dispatch.",
+      "created_at": "2026-09-04T16:27:48.720818Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-04T16:27:43.608977Z",
+  "updated_at": "2026-09-04T16:27:48.734081Z",
+  "closed_at": "2026-09-04T16:27:48.734081Z",
+  "custom": {}
+}

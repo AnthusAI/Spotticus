@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "event_id": "856a0cbd-4412-4ad2-9fa1-473123f387bb",
+  "issue_id": "spotticus-d2079a99-909a-4b7b-ba68-f595c9116010",
+  "event_type": "issue_deleted",
+  "occurred_at": "2026-09-13T13:19:03.952Z",
+  "actor_id": "home",
+  "payload": {
+    "issue_type": "task",
+    "status": "open",
+    "title": "Task C 1789305542.759678"
+  }
+}

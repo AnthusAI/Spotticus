@@ -15,11 +15,14 @@
       "id": "1694c85b-2523-45ec-a025-c0be6e2a9a22",
       "author": "home",
       "text": "Implementing composer-spot-worker skill and scripts/trigger_cursor.sh in worktree /tmp/spotticus-5a2624-composer-spot-worker on branch feat/composer-spot-worker.",
-      "created_at": "2026-09-01T19:48:03.019627Z"
+      "created_at": "2026-09-01T19:48:03.019627Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-01T17:39:13.344071Z",
   "updated_at": "2026-09-01T19:48:03.019627Z",
   "closed_at": null,
+  "right_now_summary": "The composer-spot-worker skill and trigger script are being implemented and tested.",
+  "right_now_updated_at": "2026-09-08T17:49:27.927137Z",
   "custom": {}
 }

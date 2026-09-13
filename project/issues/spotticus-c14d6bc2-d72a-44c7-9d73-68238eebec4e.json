@@ -1,0 +1,28 @@
+{
+  "id": "spotticus-c14d6bc2-d72a-44c7-9d73-68238eebec4e",
+  "title": "Model classes configuration and resolve CLI command",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "81bee9aa-64d6-4fc3-aeee-3974e4a689c0",
+      "author": "home",
+      "text": "Implemented YAML model classes configuration, resolve CLI command, and Gherkin behavior specs.",
+      "created_at": "2026-09-13T13:19:08.948009Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-13T13:18:21.463645Z",
+  "updated_at": "2026-09-13T13:19:08.976114Z",
+  "closed_at": "2026-09-13T13:19:08.976089Z",
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

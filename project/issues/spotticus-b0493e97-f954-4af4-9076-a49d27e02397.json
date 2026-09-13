@@ -1,0 +1,35 @@
+{
+  "id": "spotticus-b0493e97-f954-4af4-9076-a49d27e02397",
+  "title": "Publish Spotticus as AnthusAI/Spotticus",
+  "description": "Publish the working Spotticus repository as the public GitHub project AnthusAI/Spotticus. Preserve the existing develop branch and current Antigravity/Cursor fixture change. Definition of Done: target repository exists publicly, current history is pushed, origin is configured, and the resulting repository URL is recorded.",
+  "type": "chore",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "spotticus-90f7acef-0345-493a-83b2-048755bcc658",
+  "labels": [
+    "release"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "dc129233-256d-46e9-bed2-f253ffd05a17",
+      "author": "home",
+      "text": "Started publication. Verified this checkout has no remote, GitHub authentication is available, and no tracked secret-like files were found. The existing bin/codexbar modification is the current fixture selection and will be preserved.",
+      "created_at": "2026-09-04T16:26:08.878106Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "ff4f7bac-94e8-484e-b24b-20940d168170",
+      "author": "home",
+      "text": "Published successfully at https://github.com/AnthusAI/Spotticus. Repository is public, origin points to git@github.com:AnthusAI/Spotticus.git, and develop is pushed and tracking origin/develop. The current bin/codexbar fixture selection is included in commit cfbdd63. Kanbus local records remain untracked and were intentionally not published.",
+      "created_at": "2026-09-04T16:26:45.311357Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-04T16:26:08.856579Z",
+  "updated_at": "2026-09-04T16:26:45.322139Z",
+  "closed_at": "2026-09-04T16:26:45.322139Z",
+  "custom": {}
+}

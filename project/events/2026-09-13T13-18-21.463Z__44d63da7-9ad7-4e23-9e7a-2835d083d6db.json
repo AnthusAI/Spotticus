@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "44d63da7-9ad7-4e23-9e7a-2835d083d6db",
+  "issue_id": "spotticus-c14d6bc2-d72a-44c7-9d73-68238eebec4e",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-13T13:18:21.463Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "spotticus-09b80994-240b-4688-b915-80638fe908bb",
+    "priority": 2,
+    "status": "open",
+    "title": "Model classes configuration and resolve CLI command"
+  }
+}
